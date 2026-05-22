@@ -1,0 +1,464 @@
+openapi: "3.1.0"
+info:
+  title: AI Recruitment System API
+  description: |
+    AI-Powered Recruitment Assistant using CrewAI.
+    All endpoints except `/health` and `GET /crews/` require Bearer token authentication.
+  version: "1.0.0"
+  contact:
+    name: AgentsMarket Team
+
+servers:
+  - url: http://localhost:8000
+    description: Local development
+  - url: https://api.agentsmarket.internal
+    description: Production
+
+security:
+  - BearerAuth: []
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        Obtain a token via `POST /api/v1/auth/token` (OAuth2 password flow).
+        Include as `Authorization: Bearer <token>` header.
+
+  schemas:
+    # ── Auth ──────────────────────────────────────────────
+    TokenResponse:
+      type: object
+      required: [access_token, token_type]
+      properties:
+        access_token:
+          type: string
+        token_type:
+          type: string
+          example: bearer
+
+    # ── Crews ─────────────────────────────────────────────
+    AgentInfo:
+      type: object
+      properties:
+        agent_key:
+          type: string
+        role:
+          type: string
+        goal:
+          type: string
+
+    TaskInfo:
+      type: object
+      properties:
+        task_key:
+          type: string
+        agent_key:
+          type: string
+        order_index:
+          type: integer
+
+    CrewInfo:
+      type: object
+      properties:
+        crew_key:
+          type: string
+          example: recruitment_v1
+        version:
+          type: integer
+          example: 1
+        description:
+          type: string
+        category:
+          type: string
+          example: recruitment
+        process_type:
+          type: string
+          enum: [sequential, hierarchical]
+        status:
+          type: string
+          enum: [published, draft, archived]
+        agents:
+          type: array
+          items:
+            $ref: "#/components/schemas/AgentInfo"
+        tasks:
+          type: array
+          items:
+            $ref: "#/components/schemas/TaskInfo"
+
+    CrewListResponse:
+      type: object
+      properties:
+        crews:
+          type: array
+          items:
+            $ref: "#/components/schemas/CrewInfo"
+
+    # ── Jobs ──────────────────────────────────────────────
+    JobSubmitRequest:
+      type: object
+      required: [crew_key]
+      properties:
+        crew_key:
+          type: string
+          description: Identifier of the crew template to run
+          example: recruitment_v1
+        input:
+          type: object
+          description: Arbitrary key/value input passed to the crew
+          additionalProperties: true
+          example:
+            cv_text: "John Doe, 5 years Python, FastAPI..."
+            job_description: "Senior Backend Engineer role..."
+
+    JobSubmitResponse:
+      type: object
+      properties:
+        job_id:
+          type: string
+          format: uuid
+        crew_key:
+          type: string
+
+    JobStatusResponse:
+      type: object
+      properties:
+        job_id:
+          type: string
+          format: uuid
+        crew_key:
+          type: string
+          nullable: true
+        crew_version:
+          type: integer
+          nullable: true
+        status:
+          type: string
+          enum: [pending, running, done, failed, unknown]
+        result:
+          description: Final crew output when status=done
+          nullable: true
+
+    # ── Tasks (legacy endpoint — prefer /jobs/) ────────────
+    TaskCreateRequest:
+      type: object
+      properties:
+        cv_text:
+          type: string
+          description: Candidate CV/resume text
+          nullable: true
+        job_description:
+          type: string
+          description: Job description text
+          nullable: true
+        crew_key:
+          type: string
+          description: Override the default crew (defaults to recruitment_screening)
+          nullable: true
+      additionalProperties: true
+
+    TaskCreateResponse:
+      type: object
+      properties:
+        task_id:
+          type: string
+          format: uuid
+
+    # ── Results ───────────────────────────────────────────
+    CandidateResult:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        score:
+          type: number
+          format: float
+          nullable: true
+        skills:
+          type: array
+          items:
+            type: string
+          nullable: true
+        match_level:
+          type: string
+          nullable: true
+        recommendation:
+          type: string
+          nullable: true
+
+    TaskResultResponse:
+      type: object
+      properties:
+        task_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [pending, running, done, failed, unknown]
+        result:
+          nullable: true
+
+    # ── Errors ────────────────────────────────────────────
+    HTTPError:
+      type: object
+      properties:
+        detail:
+          type: string
+
+paths:
+  # ── Health ────────────────────────────────────────────
+  /health:
+    get:
+      summary: Health check
+      description: Returns HTTP 200 when the API is running. No authentication required.
+      operationId: healthCheck
+      security: []
+      tags: [System]
+      responses:
+        "200":
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+
+  # ── Auth ──────────────────────────────────────────────
+  /api/v1/auth/token:
+    post:
+      summary: Obtain access token (OAuth2 Password Flow)
+      description: |
+        Exchange username + password for a JWT access token.
+        Use the returned `access_token` as `Authorization: Bearer <token>`.
+      operationId: loginForAccessToken
+      security: []
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [username, password]
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                  format: password
+      responses:
+        "200":
+          description: Token issued
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TokenResponse"
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPError"
+
+  # ── Crews ─────────────────────────────────────────────
+  /api/v1/crews/:
+    get:
+      summary: List available crew templates
+      description: Returns all published CrewAI workflow templates. Public endpoint — no authentication required.
+      operationId: listCrews
+      security: []
+      tags: [Crews]
+      responses:
+        "200":
+          description: List of published crew templates
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CrewListResponse"
+
+  # ── Jobs ──────────────────────────────────────────────
+  /api/v1/jobs/:
+    post:
+      summary: Submit a new job
+      description: |
+        Enqueues a CrewAI crew execution for the specified `crew_key`.
+        Returns a `job_id` (UUID) for polling status.
+        **Requires authentication.**
+      operationId: submitJob
+      tags: [Jobs]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/JobSubmitRequest"
+            examples:
+              recruitment:
+                summary: Full recruitment screening
+                value:
+                  crew_key: recruitment_v1
+                  input:
+                    cv_text: "Alice Smith — 8 years Python/FastAPI..."
+                    job_description: "We are hiring a Senior Backend Engineer..."
+              scoring_only:
+                summary: Score candidate only
+                value:
+                  crew_key: scoring_only_v1
+                  input:
+                    cv_text: "Bob Jones — 3 years React..."
+                    job_description: "Frontend Engineer..."
+      responses:
+        "202":
+          description: Job accepted and queued
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JobSubmitResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPError"
+        "404":
+          description: Crew not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPError"
+
+  /api/v1/jobs/{job_id}:
+    get:
+      summary: Get job status and result
+      description: |
+        Poll for job status. When `status=done`, `result` contains the crew's output.
+        **Requires authentication.**
+      operationId: getJobStatus
+      tags: [Jobs]
+      parameters:
+        - name: job_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: UUID returned by POST /jobs/
+      responses:
+        "200":
+          description: Job status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JobStatusResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPError"
+        "404":
+          description: Job not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPError"
+
+  # ── Tasks (legacy) ────────────────────────────────────
+  /api/v1/tasks/:
+    post:
+      summary: Create a task (legacy endpoint)
+      description: |
+        Simplified wrapper around job submission for recruitment screening tasks.
+        Prefer `POST /api/v1/jobs/` for full control.
+        **Requires authentication.**
+      operationId: createTask
+      tags: [Tasks]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskCreateRequest"
+            examples:
+              basic:
+                summary: Screen a candidate
+                value:
+                  cv_text: "Jane Doe — 5 years Java..."
+                  job_description: "Java Backend Developer..."
+      responses:
+        "202":
+          description: Task accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskCreateResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPError"
+        "404":
+          description: Crew not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPError"
+
+  # ── Results ───────────────────────────────────────────
+  /api/v1/results/{task_id}:
+    get:
+      summary: Get task result
+      description: |
+        Retrieve the result for a previously submitted task or job.
+        **Requires authentication.**
+      operationId: getResult
+      tags: [Results]
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: UUID returned by POST /tasks/ or POST /jobs/
+      responses:
+        "200":
+          description: Task result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskResultResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPError"
+        "404":
+          description: Task not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPError"
+
+tags:
+  - name: System
+    description: Health and infrastructure endpoints
+  - name: Auth
+    description: Authentication — obtain JWT tokens
+  - name: Crews
+    description: Browse available CrewAI workflow templates
+  - name: Jobs
+    description: Submit and monitor AI recruitment jobs
+  - name: Tasks
+    description: Legacy task API (wraps Jobs)
+  - name: Results
+    description: Retrieve job/task execution results
