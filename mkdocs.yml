@@ -1,0 +1,21 @@
+site_name: Agent Market Documentation
+site_description: Documentation portal for the AI recruitment agent project
+docs_dir: .
+site_dir: site
+theme:
+  name: readthedocs
+nav:
+  - Home: README.md
+  - Application Spec: application-spec.md
+  - API Spec: api-spec.md
+  - Deployment Architecture: deployment-architecture.md
+  - Sequence Flow: sequence-flow.md
+  - Workflow Compliance: workflow-compliance.md
+  - Threat Model: threat-model.md
+  - Deployment Runbook: deployment-runbook.md
+  - Architecture Blueprint: PROJECT_ARCHITECTURE_BLUEPRINT.md
+  - Redis Message Layout: redis-message-layout.md
+  - ADR Candidates: adr-candidates.md
+  - Release Notes: release-notes.md
+plugins:
+  - search

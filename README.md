@@ -1,24 +1,32 @@
-# Generated Documentation Index
+# Agent Market Documentation
 
-- Last updated (UTC): 2026-05-10 18:10:17 UTC
-- Updated docs in this run: application-spec.md, api-spec.md, deployment-architecture.md, sequence-flow.md, release-notes.md, adr-candidates.md
+Tài liệu này mô tả dự án agent AI Recruitment System, tập trung vào kiến trúc, giao diện API, luồng xử lý và yêu cầu vận hành.
 
-## Documents
-- application-spec.md
-- api-spec.md
-- deployment-architecture.md
-- sequence-flow.md
-- release-notes.md
-- adr-candidates.md
+## Mục tiêu
+- Giới thiệu tổng quan về hệ thống agent recruitment.
+- Định nghĩa hợp đồng API và hành vi dịch vụ.
+- Mô tả kiến trúc triển khai và luồng dữ liệu.
+- Giải thích các bản ghi quyết định kỹ thuật (ADR), mô hình đe dọa và tuân thủ workflow.
 
-## Working Tree Changes Considered
-- docs/generated/README.md
-- docs/generated/adr-candidates.md
-- docs/generated/api-spec.md
-- docs/generated/application-spec.md
-- docs/generated/deployment-architecture.md
-- docs/generated/release-notes.md
-- docs/generated/sequence-flow.md
-- docs/generated/workflow-compliance.md
-- gitignore
-- scripts/notify_webhook.py
+## Tài liệu chính
+- application-spec.md: đặc tả chức năng và phi chức năng của ứng dụng.
+- api-spec.md: mô tả hợp đồng API, endpoint và mô hình dữ liệu.
+- deployment-architecture.md: cấu trúc hệ thống, dịch vụ, và môi trường triển khai.
+- sequence-flow.md: luồng tuần tự của tác vụ và xử lý bất đồng bộ.
+- workflow-compliance.md: báo cáo tuân thủ quy trình và kết quả kiểm thử.
+- threat-model.md: phân tích rủi ro và mô hình đe dọa.
+- deployment-runbook.md: hướng dẫn vận hành và khởi chạy môi trường.
+- PROJECT_ARCHITECTURE_BLUEPRINT.md: bản đồ kiến trúc tổng quan.
+- redis-message-layout.md: định nghĩa mẫu tin Redis cho giao tiếp queue.
+- adr-candidates.md: các ứng viên đề xuất cho ADR.
+- release-notes.md: lịch sử phát hành và thay đổi chính.
+
+## Sử dụng với MkDocs
+- `mkdocs serve`: chạy site tài liệu cục bộ.
+- `mkdocs build`: sinh site tĩnh vào thư mục `site/`.
+
+---
+
+### Ghi chú
+- Cấu hình MkDocs đã được định nghĩa trong `mkdocs.yml`.
+- Tài liệu này là điểm vào chính để điều hướng các bản mô tả dự án.
