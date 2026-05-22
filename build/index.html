@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="Complete guide for integrating AgentsMarket with external platforms" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>AgentsMarket Integration Documentation</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Home";
+        var mkdocs_page_input_path = "index.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="." class="icon icon-home"> AgentsMarket Integration Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Home</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#overview">📋 Overview</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#quick-start">🚀 Quick Start</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#1-authenticate">1. Authenticate</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#2-discover-workers">2. Discover Workers</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#3-submit-a-task">3. Submit a Task</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#4-poll-task-status">4. Poll Task Status</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#documentation-structure">📚 Documentation Structure</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#common-workflows">🔧 Common Workflows</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#bulk-recruitment-screening">Bulk Recruitment Screening</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#parallel-worker-execution">Parallel Worker Execution</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#async-patterns-with-polling">Async Patterns with Polling</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#security-best-practices">🔐 Security &amp; Best Practices</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#support-feedback">📞 Support &amp; Feedback</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="getting-started/01-introduction/">Introduction</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="getting-started/02-authentication/">Authentication</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">API Guide</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="api-guide/01-api-overview/">Overview</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Integration Patterns</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" >Code Examples</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="integration-patterns/code-examples/01-curl/">cURL</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="integration-patterns/code-examples/02-python/">Python</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="integration-patterns/code-examples/03-javascript/">JavaScript</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="integration-patterns/02-workflows/">Workflows</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="integration-patterns/03-async-patterns/">Async Patterns & Webhooks</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Operations</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="operations/01-troubleshooting/">Troubleshooting & Operations</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Architecture</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="architecture/01-system-overview/">System Overview</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Reference</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="reference/glossary/">Glossary</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="reference/openapi.yaml">OpenAPI Specification</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href=".">AgentsMarket Integration Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Home</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="ceonova-agentsmarket-integration-guide">CEONOVA AgentsMarket Integration Guide</h1>
+<p><strong>AgentsMarket Workers API for CEONOVA</strong></p>
+<hr />
+<h2 id="overview">📋 Overview</h2>
+<p>AgentsMarket exposes a <strong>REST API</strong> that allows CEONOVA to:
+- <strong>Discover workers</strong> — browse published CrewAI templates as AI workers
+- <strong>Submit tasks</strong> — send work to a specific worker for async execution
+- <strong>Poll results</strong> — check task status and retrieve outputs
+- <strong>Manage tasks</strong> — list, filter, and monitor tasks by CEONova user</p>
+<p>This guide is for <strong>CEONOVA internal developers</strong> integrating with AgentsMarket in production.</p>
+<hr />
+<h2 id="quick-start">🚀 Quick Start</h2>
+<h3 id="1-authenticate">1. Authenticate</h3>
+<p>AgentsMarket supports <strong>two authentication methods</strong> on <code>/api/v1/workers/</code> endpoints:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>JWT Bearer</strong></td>
+<td>Human/browser, short-lived token</td>
+</tr>
+<tr>
+<td><strong>HTTP Basic Auth</strong></td>
+<td>Service-to-service (CEONova → AgentsMarket)</td>
+</tr>
+</tbody>
+</table>
+<p>→ <strong><a href="getting-started/02-authentication/">Learn Authentication →</a></strong></p>
+<h3 id="2-discover-workers">2. Discover Workers</h3>
+<p>List all available workers and their capabilities:</p>
+<pre><code class="language-bash">curl -X GET http://localhost:8000/api/v1/workers/ \
+  -u &quot;ceonova@agentsmarket.com:password&quot;
+</code></pre>
+<p>→ <strong><a href="api-guide/01-api-overview/">API Reference →</a></strong></p>
+<h3 id="3-submit-a-task">3. Submit a Task</h3>
+<p>Send work to a worker for async execution:</p>
+<pre><code class="language-bash">curl -X POST http://localhost:8000/api/v1/workers/recruitment_v1/tasks \
+  -u &quot;ceonova@agentsmarket.com:password&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{
+    &quot;title&quot;: &quot;Screen Alice Johnson&quot;,
+    &quot;objective&quot;: &quot;Evaluate candidate fit&quot;,
+    &quot;context&quot;: &quot;Senior Engineer role, 5+ years Python&quot;,
+    &quot;expected_output&quot;: &quot;Score and recommendation&quot;,
+    &quot;external_user_id&quot;: &quot;ceonova-user-456&quot;
+  }'
+</code></pre>
+<h3 id="4-poll-task-status">4. Poll Task Status</h3>
+<p>Check progress and retrieve results:</p>
+<pre><code class="language-bash">curl -X GET http://localhost:8000/api/v1/workers/recruitment_v1/tasks/{task_id} \
+  -u &quot;ceonova@agentsmarket.com:password&quot;
+</code></pre>
+<p>→ <strong><a href="integration-patterns/code-examples/02-python/">Code Examples →</a></strong></p>
+<hr />
+<h2 id="documentation-structure">📚 Documentation Structure</h2>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><a href="getting-started/01-introduction/">Getting Started</a></strong></td>
+<td>Overview &amp; authentication setup</td>
+</tr>
+<tr>
+<td><strong><a href="api-guide/01-api-overview/">API Guide</a></strong></td>
+<td>Complete endpoint reference</td>
+</tr>
+<tr>
+<td><strong><a href="integration-patterns/code-examples/01-curl/">Code Examples</a></strong></td>
+<td>Ready-to-use samples (cURL, Python, JS)</td>
+</tr>
+<tr>
+<td><strong><a href="integration-patterns/02-workflows/">Integration Patterns</a></strong></td>
+<td>Real-world use cases &amp; workflows</td>
+</tr>
+<tr>
+<td><strong><a href="integration-patterns/03-async-patterns/">Async Patterns</a></strong></td>
+<td>Polling, webhooks, retry strategies</td>
+</tr>
+<tr>
+<td><strong><a href="operations/01-troubleshooting/">Operations</a></strong></td>
+<td>Troubleshooting, monitoring, rate limits</td>
+</tr>
+<tr>
+<td><strong><a href="architecture/01-system-overview/">Architecture</a></strong></td>
+<td>System design &amp; deployment</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="common-workflows">🔧 Common Workflows</h2>
+<h3 id="bulk-recruitment-screening">Bulk Recruitment Screening</h3>
+<p>Screen multiple candidates in parallel, collect scores, rank results.</p>
+<p>→ <strong><a href="integration-patterns/02-workflows/#workflow-1-bulk-recruitment-screening">See Bulk Screening Workflow →</a></strong></p>
+<h3 id="parallel-worker-execution">Parallel Worker Execution</h3>
+<p>Run multiple workers on the same input, correlate results.</p>
+<p>→ <strong><a href="integration-patterns/02-workflows/#workflow-2-parallel-worker-execution">See Parallel Execution →</a></strong></p>
+<h3 id="async-patterns-with-polling">Async Patterns with Polling</h3>
+<p>Implement exponential backoff, circuit breaker, idempotency.</p>
+<p>→ <strong><a href="integration-patterns/03-async-patterns/">See Async Patterns →</a></strong></p>
+<hr />
+<h2 id="security-best-practices">🔐 Security &amp; Best Practices</h2>
+<ul>
+<li>Always use <strong>HTTPS</strong> in production (not HTTP)</li>
+<li>Store credentials in environment variables, never in code</li>
+<li>Implement <strong>exponential backoff</strong> for retries</li>
+<li>Use <strong>HTTP Basic Auth</strong> for service-to-service (more stable)</li>
+<li>Include unique <code>external_user_id</code> for audit trails</li>
+</ul>
+<p>→ <strong><a href="operations/01-troubleshooting/">See Troubleshooting Guide →</a></strong></p>
+<hr />
+<h2 id="support-feedback">📞 Support &amp; Feedback</h2>
+<p>For issues, feature requests, or questions:
+- Check the <strong><a href="operations/01-troubleshooting/">Troubleshooting Guide</a></strong> first
+- Review <strong><a href="reference/openapi.yaml">OpenAPI Specification</a></strong> for schema details
+- Contact AgentsMarket support team</p>
+<hr />
+<p><strong>Last Updated:</strong> May 23, 2026<br />
+<strong>API Version:</strong> v1<br />
+<strong>Status:</strong> Production Ready</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="getting-started/01-introduction/" class="btn btn-neutral float-right" title="Introduction">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+      <span><a href="getting-started/01-introduction/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
+
+<!--
+MkDocs version : 1.6.1
+Build Date UTC : 2026-05-22 21:31:22.666177+00:00
+-->

@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>System Overview - AgentsMarket Integration Documentation</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "System Overview";
+        var mkdocs_page_input_path = "architecture\\01-system-overview.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> AgentsMarket Integration Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../getting-started/01-introduction/">Introduction</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../getting-started/02-authentication/">Authentication</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">API Guide</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api-guide/01-api-overview/">Overview</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Integration Patterns</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" >Code Examples</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../integration-patterns/code-examples/01-curl/">cURL</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../integration-patterns/code-examples/02-python/">Python</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../integration-patterns/code-examples/03-javascript/">JavaScript</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../integration-patterns/02-workflows/">Workflows</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../integration-patterns/03-async-patterns/">Async Patterns & Webhooks</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Operations</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../operations/01-troubleshooting/">Troubleshooting & Operations</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Architecture</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">System Overview</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#architecture-overview">Architecture Overview</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#core-design-pattern">Core Design Pattern</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#architectural-principles">Architectural Principles</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#c4-architecture-diagrams">C4 Architecture Diagrams</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#level-1-system-context">Level 1: System Context</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#level-2-container-diagram">Level 2: Container Diagram</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#level-3-component-diagram-backend">Level 3: Component Diagram (Backend)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#technology-stack">Technology Stack</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#data-flow">Data Flow</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#task-submission-flow">Task Submission Flow</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#sequence-diagram">Sequence Diagram</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#deployment-architecture">Deployment Architecture</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#development-docker-compose">Development (Docker Compose)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#production-kubernetes">Production (Kubernetes)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#scalability">Scalability</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#horizontal-scaling">Horizontal Scaling</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#bottleneck-analysis">Bottleneck Analysis</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#security-considerations">Security Considerations</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#monitoring-observability">Monitoring &amp; Observability</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#metrics">Metrics</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#logging">Logging</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#alerting">Alerting</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Reference</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../reference/glossary/">Glossary</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../reference/openapi.yaml">OpenAPI Specification</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">AgentsMarket Integration Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Architecture</li>
+      <li class="breadcrumb-item active">System Overview</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="system-architecture">System Architecture</h1>
+<p><strong>AgentsMarket platform architecture and design</strong></p>
+<hr />
+<h2 id="architecture-overview">Architecture Overview</h2>
+<h3 id="core-design-pattern">Core Design Pattern</h3>
+<p>AgentsMarket follows a <strong>distributed microservices architecture</strong> optimized for:
+- <strong>Scalability</strong> — API and workers can scale independently
+- <strong>Resilience</strong> — Failure in one component doesn't cascade
+- <strong>Asynchronous Processing</strong> — Long-running AI workflows don't block API
+- <strong>AI-First Design</strong> — CrewAI agents as first-class components</p>
+<h3 id="architectural-principles">Architectural Principles</h3>
+<pre><code>┌─────────────────────────────────────────────────────────┐
+│ 1. Separation of Concerns (SoC)                         │
+│    - API handles HTTP requests                          │
+│    - Workers handle async/batch processing              │
+│    - Agents handle AI/business logic                    │
+├─────────────────────────────────────────────────────────┤
+│ 2. Stateless Services                                   │
+│    - Each component can be restarted without impact     │
+│    - State stored in external DB/Cache                 │
+├─────────────────────────────────────────────────────────┤
+│ 3. Async-First for AI Operations                       │
+│    - AI workflows dispatched to workers                │
+│    - API doesn't wait for agent completion             │
+├─────────────────────────────────────────────────────────┤
+│ 4. Clear Boundaries                                     │
+│    - API/Workers communicate via queue/API             │
+│    - Database as single source of truth                │
+│    - Frontend → API only (no direct DB access)        │
+└─────────────────────────────────────────────────────────┘
+</code></pre>
+<hr />
+<h2 id="c4-architecture-diagrams">C4 Architecture Diagrams</h2>
+<h3 id="level-1-system-context">Level 1: System Context</h3>
+<pre><code>┌──────────────────────────────────────────────────────────┐
+│                     AGENTSMARKET SYSTEM                  │
+├──────────────────────────────────────────────────────────┤
+│                                                          │
+│  External System: CEONOVA                               │
+│  └─ Sends task requests via REST API                    │
+│  └─ Polls task status                                   │
+│                                                          │
+│  User: Recruiter/Admin                                  │
+│  └─ Uses frontend to monitor tasks                      │
+│  └─ Browses published workers                           │
+│                                                          │
+│  External System: CrewAI Framework                       │
+│  └─ Defines agent workflows                             │
+│  └─ Executes business logic                             │
+│                                                          │
+└──────────────────────────────────────────────────────────┘
+</code></pre>
+<h3 id="level-2-container-diagram">Level 2: Container Diagram</h3>
+<pre><code>┌─────────────────────────────────────────────────────────────┐
+│                      AGENTSMARKET                           │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  ┌─────────────────────────────────────────────┐           │
+│  │  Frontend (React)                           │           │
+│  │  - Browse workers                           │           │
+│  │  - View task status                         │           │
+│  │  - REST API client                          │           │
+│  └────────────┬────────────────────────────────┘           │
+│               │                                            │
+│               ↓ HTTP/REST (port 3000)                      │
+│                                                            │
+│  ┌─────────────────────────────────────────────┐           │
+│  │  API Server (FastAPI/Flask)                 │           │
+│  │  - Authentication (JWT, Basic Auth)         │           │
+│  │  - Workers discovery endpoint                │           │
+│  │  - Task submission endpoint                  │           │
+│  │  - Task polling endpoint                     │           │
+│  │  - (port 8000)                              │           │
+│  └────────────┬────────────────────────────────┘           │
+│               │                                            │
+│      ┌────────┴─────────┐                                 │
+│      ↓                  ↓                                 │
+│  ┌─────────────┐   ┌──────────────────┐                  │
+│  │  PostgreSQL │   │  Redis Queue     │                  │
+│  │  Database   │   │  (Task Queue)    │                  │
+│  └─────────────┘   └────────┬─────────┘                  │
+│                             ↓                            │
+│  ┌─────────────────────────────────────────┐             │
+│  │  Worker Service (Python)                │             │
+│  │  - Process tasks from queue             │             │
+│  │  - Execute CrewAI agents                │             │
+│  │  - Store results in DB                  │             │
+│  └─────────────────────────────────────────┘             │
+│                                                            │
+└─────────────────────────────────────────────────────────────┘
+</code></pre>
+<h3 id="level-3-component-diagram-backend">Level 3: Component Diagram (Backend)</h3>
+<pre><code>API Service
+├─ Auth Module (JWT, Basic Auth)
+├─ Workers Router
+│  ├─ GET /api/v1/workers/
+│  └─ GET /api/v1/workers/{worker_id}
+├─ Tasks Router
+│  ├─ POST /api/v1/workers/{worker_id}/tasks
+│  ├─ GET /api/v1/workers/{worker_id}/tasks
+│  └─ GET /api/v1/workers/{worker_id}/tasks/{task_id}
+└─ Database Access Layer
+
+Worker Service
+├─ Queue Consumer (Redis)
+├─ Agent Executor (CrewAI)
+├─ Result Storage
+└─ Error Handler
+
+Database (PostgreSQL)
+├─ Users table
+├─ Workers table
+├─ Tasks table
+└─ Results table
+
+Cache (Redis)
+├─ Task queue
+├─ Session store
+└─ Rate limit counters
+</code></pre>
+<hr />
+<h2 id="technology-stack">Technology Stack</h2>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Technology</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Frontend</strong></td>
+<td>React, HTML, CSS, JS</td>
+<td>User interface</td>
+</tr>
+<tr>
+<td><strong>Backend</strong></td>
+<td>Python 3.x, FastAPI/Flask</td>
+<td>REST API, request handling</td>
+</tr>
+<tr>
+<td><strong>AI Engine</strong></td>
+<td>CrewAI</td>
+<td>Agent orchestration, workflows</td>
+</tr>
+<tr>
+<td><strong>Queue</strong></td>
+<td>Redis</td>
+<td>Async task queue</td>
+</tr>
+<tr>
+<td><strong>Database</strong></td>
+<td>PostgreSQL</td>
+<td>Persistent state</td>
+</tr>
+<tr>
+<td><strong>Containerization</strong></td>
+<td>Docker</td>
+<td>Deployment, reproducibility</td>
+</tr>
+<tr>
+<td><strong>Orchestration</strong></td>
+<td>Docker Compose</td>
+<td>Local dev; Kubernetes for prod</td>
+</tr>
+<tr>
+<td><strong>Proxy</strong></td>
+<td>Nginx</td>
+<td>Load balancing, SSL termination</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="data-flow">Data Flow</h2>
+<h3 id="task-submission-flow">Task Submission Flow</h3>
+<pre><code>1. CEONOVA API Client
+   ↓ (POST /api/v1/workers/{worker_id}/tasks)
+
+2. API Server (FastAPI)
+   ├─ Authenticate request (Basic Auth / JWT)
+   ├─ Validate request body
+   ├─ Create Task record in PostgreSQL
+   ├─ Publish message to Redis queue
+   └─ Return 202 Accepted + task_id
+
+3. Redis Queue
+   └─ Message: {task_id, worker_id, context, ...}
+
+4. Worker Service (Python)
+   ├─ Consume message from queue
+   ├─ Execute CrewAI agent
+   ├─ Collect results
+   └─ Store in PostgreSQL
+
+5. PostgreSQL
+   └─ Update task record with result &amp; status=done
+
+6. CEONOVA (Polling)
+   ↓ (GET /api/v1/workers/{worker_id}/tasks/{task_id})
+
+7. API Server (FastAPI)
+   ├─ Authenticate request
+   ├─ Fetch task from PostgreSQL
+   ├─ Return 200 + task status + result
+   └─ CEONOVA processes result
+</code></pre>
+<h3 id="sequence-diagram">Sequence Diagram</h3>
+<pre><code>CEONOVA        API Server      PostgreSQL     Redis Queue      Worker
+   │                │                │            │              │
+   │─ Discover ───→│                │            │              │
+   │  workers      │─ Query ────────→│            │              │
+   │               │← Workers ───────│            │              │
+   │← Workers ─────│                │            │              │
+   │                │                │            │              │
+   │─ Submit ──────→│                │            │              │
+   │  task          │─ Create ───────→│            │              │
+   │               │← Task ID ──────│            │              │
+   │               │─ Publish ──────────────────→│              │
+   │               │                │            │─ Consume ───→│
+   │← 202 Accepted─│                │            │  Consume     │
+   │  (task_id)    │                │            │  Execute     │
+   │                │                │            │  CrewAI      │
+   │                │                │            │              │─ Run Agent
+   │                │                │            │              │
+   │ (wait 2-5 min)│                │            │              │
+   │                │                │            │    Result    │
+   │─ Poll ───────→│                │            │  ←─────────  │
+   │  status       │─ Fetch ────────→│            │              │
+   │               │← Task+Result ──│            │              │
+   │               │─ Update ───────→│            │              │
+   │← 200 + result─│                │            │              │
+   │  (done,       │                │            │              │
+   │   data)       │                │            │              │
+</code></pre>
+<hr />
+<h2 id="deployment-architecture">Deployment Architecture</h2>
+<h3 id="development-docker-compose">Development (Docker Compose)</h3>
+<pre><code>┌─────────────────────────────────┐
+│      docker-compose up          │
+├─────────────────────────────────┤
+│                                 │
+│  Frontend                       │
+│  ├─ node:18                     │
+│  └─ Port 3000                   │
+│                                 │
+│  API Server                     │
+│  ├─ Python:3.x                  │
+│  ├─ FastAPI/Flask               │
+│  └─ Port 8000                   │
+│                                 │
+│  PostgreSQL                     │
+│  ├─ postgres:14                 │
+│  └─ Port 5432                   │
+│                                 │
+│  Redis                          │
+│  ├─ redis:7                     │
+│  └─ Port 6379                   │
+│                                 │
+│  Worker Service                 │
+│  ├─ Python:3.x                  │
+│  └─ Consuming from Redis        │
+│                                 │
+└─────────────────────────────────┘
+</code></pre>
+<h3 id="production-kubernetes">Production (Kubernetes)</h3>
+<pre><code>┌────────────────────────────────────────────────┐
+│          Kubernetes Cluster                    │
+├────────────────────────────────────────────────┤
+│                                                │
+│  Ingress                                       │
+│  └─ Handle external traffic                    │
+│                                                │
+│  Services                                      │
+│  ├─ API Service (LoadBalancer)                 │
+│  ├─ Frontend Service (ClusterIP)               │
+│  └─ Worker Service (ClusterIP)                 │
+│                                                │
+│  Deployments                                   │
+│  ├─ API (replicas: 3)                          │
+│  ├─ Frontend (replicas: 2)                     │
+│  ├─ Worker (replicas: 5, auto-scale)           │
+│  └─ Redis (StatefulSet)                        │
+│                                                │
+│  Persistent Volumes                            │
+│  ├─ PostgreSQL data                            │
+│  └─ Redis data                                 │
+│                                                │
+│  ConfigMaps                                    │
+│  └─ Application config                         │
+│                                                │
+└────────────────────────────────────────────────┘
+</code></pre>
+<hr />
+<h2 id="scalability">Scalability</h2>
+<h3 id="horizontal-scaling">Horizontal Scaling</h3>
+<ol>
+<li>
+<p><strong>API Service</strong> — Add replicas for request handling
+   <code>bash
+   kubectl scale deployment api --replicas=10</code></p>
+</li>
+<li>
+<p><strong>Worker Service</strong> — Add replicas for task processing
+   <code>bash
+   kubectl scale deployment worker --replicas=50</code></p>
+</li>
+<li>
+<p><strong>Database</strong> — Master-replica setup for read scaling
+   ```yaml
+   database:
+     master: primary-db-pod
+     replicas:</p>
+<ul>
+<li>replica-1</li>
+<li>replica-2
+   ```</li>
+</ul>
+</li>
+<li>
+<p><strong>Redis</strong> — Cluster mode for queue scaling
+   <code>yaml
+   redis:
+     mode: cluster
+     nodes: 6  # minimum</code></p>
+</li>
+</ol>
+<h3 id="bottleneck-analysis">Bottleneck Analysis</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Bottleneck</th>
+<th>Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API</td>
+<td>Request rate</td>
+<td>Add replicas, load balancer</td>
+</tr>
+<tr>
+<td>Worker</td>
+<td>Task execution time</td>
+<td>Optimize agent logic, add workers</td>
+</tr>
+<tr>
+<td>Database</td>
+<td>Query load</td>
+<td>Read replicas, caching</td>
+</tr>
+<tr>
+<td>Redis</td>
+<td>Queue throughput</td>
+<td>Cluster mode, sharding</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="security-considerations">Security Considerations</h2>
+<ol>
+<li><strong>Authentication</strong> — JWT or Basic Auth (HTTPS required)</li>
+<li><strong>Authorization</strong> — User-based task filtering via external_user_id</li>
+<li><strong>Data Encryption</strong> — TLS for transport, encryption at rest for sensitive data</li>
+<li><strong>Rate Limiting</strong> — Prevent abuse (20 req/min per IP)</li>
+<li><strong>Secret Management</strong> — Store credentials in secure vaults (AWS Secrets Manager, K8s Secrets)</li>
+<li><strong>Audit Logging</strong> — Track all API calls with user IDs</li>
+</ol>
+<hr />
+<h2 id="monitoring-observability">Monitoring &amp; Observability</h2>
+<h3 id="metrics">Metrics</h3>
+<ul>
+<li>Task submission rate</li>
+<li>Task completion rate</li>
+<li>Task average duration</li>
+<li>Worker utilization</li>
+<li>API response time</li>
+<li>Error rate</li>
+<li>Rate limit hits</li>
+</ul>
+<h3 id="logging">Logging</h3>
+<ul>
+<li>Request/response logs</li>
+<li>Task execution logs</li>
+<li>Error logs with trace IDs</li>
+<li>Audit logs (who called what)</li>
+</ul>
+<h3 id="alerting">Alerting</h3>
+<ul>
+<li>High error rate (&gt; 5%)</li>
+<li>Slow task execution (&gt; 10 min average)</li>
+<li>Queue backlog (&gt; 1000 pending)</li>
+<li>Worker failure (&gt; 3 consecutive failures)</li>
+<li>Rate limit abuse (&gt; 5 hits/min)</li>
+</ul>
+<hr />
+<h2 id="next-steps">Next Steps</h2>
+<p>→ <strong><a href="../../getting-started/01-introduction/">Getting Started</a></strong> — Quick integration guide</p>
+<p>→ <strong><a href="../../api-guide/01-api-overview/">API Reference</a></strong> — Endpoint documentation</p>
+<p>→ <strong><a href="../../integration-patterns/code-examples/01-curl/">Code Examples</a></strong> — Working samples</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../../operations/01-troubleshooting/" class="btn btn-neutral float-left" title="Troubleshooting & Operations"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../reference/glossary/" class="btn btn-neutral float-right" title="Glossary">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../../operations/01-troubleshooting/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../../reference/glossary/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

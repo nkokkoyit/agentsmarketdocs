@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Authentication - AgentsMarket Integration Documentation</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Authentication";
+        var mkdocs_page_input_path = "getting-started\\02-authentication.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> AgentsMarket Integration Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../01-introduction/">Introduction</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Authentication</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#method-1-http-basic-auth-recommended-for-ceonova">Method 1: HTTP Basic Auth (Recommended for CEONOVA)</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#how-it-works">How It Works</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#obtaining-credentials">Obtaining Credentials</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#using-basic-auth-with-curl">Using Basic Auth with cURL</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#using-basic-auth-in-code">Using Basic Auth in Code</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#method-2-jwt-bearer-token">Method 2: JWT Bearer Token</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#how-it-works_1">How It Works</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#obtaining-a-bearer-token">Obtaining a Bearer Token</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#using-bearer-token">Using Bearer Token</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#token-expiry-refresh">Token Expiry &amp; Refresh</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#python-example-with-token-refresh">Python Example with Token Refresh</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#comparison-basic-auth-vs-bearer-token">Comparison: Basic Auth vs Bearer Token</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#security-best-practices">Security Best Practices</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#1-never-hardcode-credentials">1. Never Hardcode Credentials</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#2-use-https-in-production">2. Use HTTPS in Production</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#3-rotate-credentials-periodically">3. Rotate Credentials Periodically</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#4-mask-credentials-in-logs">4. Mask Credentials in Logs</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#5-dont-expose-credentials-in-frontend">5. Don't Expose Credentials in Frontend</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#environment-variable-setup">Environment Variable Setup</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#using-env-file-development">Using .env File (Development)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#using-shell-environment-production">Using Shell Environment (Production)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#using-docker">Using Docker</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#testing-authentication">Testing Authentication</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#verify-credentials-work">Verify Credentials Work</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#debug-failed-authentication">Debug Failed Authentication</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#whats-next">What's Next?</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">API Guide</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api-guide/01-api-overview/">Overview</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Integration Patterns</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" >Code Examples</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../integration-patterns/code-examples/01-curl/">cURL</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../integration-patterns/code-examples/02-python/">Python</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../integration-patterns/code-examples/03-javascript/">JavaScript</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../integration-patterns/02-workflows/">Workflows</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../integration-patterns/03-async-patterns/">Async Patterns & Webhooks</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Operations</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../operations/01-troubleshooting/">Troubleshooting & Operations</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Architecture</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../architecture/01-system-overview/">System Overview</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Reference</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../reference/glossary/">Glossary</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../reference/openapi.yaml">OpenAPI Specification</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">AgentsMarket Integration Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Getting Started</li>
+      <li class="breadcrumb-item active">Authentication</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="authentication">Authentication</h1>
+<p><strong>Two methods to authenticate with AgentsMarket API</strong></p>
+<hr />
+<h2 id="overview">Overview</h2>
+<p>AgentsMarket <code>/api/v1/workers/</code> endpoints support <strong>two authentication methods</strong>:</p>
+<ol>
+<li><strong>JWT Bearer Token</strong> — Time-limited, OAuth2-style (good for humans &amp; browsers)</li>
+<li><strong>HTTP Basic Auth</strong> — Simple, credentials-based (good for service-to-service)</li>
+</ol>
+<p>Both grant the same access. Choose based on your use case.</p>
+<hr />
+<h2 id="method-1-http-basic-auth-recommended-for-ceonova">Method 1: HTTP Basic Auth (Recommended for CEONOVA)</h2>
+<h3 id="how-it-works">How It Works</h3>
+<ol>
+<li>Your email &amp; password are encoded in Base64</li>
+<li>Sent in <code>Authorization: Basic</code> header with every request</li>
+<li>No token expiry — credentials work indefinitely (until password rotated)</li>
+</ol>
+<h3 id="obtaining-credentials">Obtaining Credentials</h3>
+<p>Contact your AgentsMarket administrator to:
+1. Create an account with your email
+2. Set a secure password
+3. Provide you both values</p>
+<p><strong>Example:</strong>
+- Email: <code>ceonova@agentsmarket.com</code>
+- Password: <code>your-secure-password</code></p>
+<h3 id="using-basic-auth-with-curl">Using Basic Auth with cURL</h3>
+<p><strong>Automatic (easier):</strong></p>
+<pre><code class="language-bash">curl -X GET http://localhost:8000/api/v1/workers/ \
+  -u &quot;ceonova@agentsmarket.com:your-secure-password&quot;
+</code></pre>
+<p><strong>Manual (if needed):</strong></p>
+<pre><code class="language-bash"># 1. Encode credentials in base64
+echo -n &quot;ceonova@agentsmarket.com:your-secure-password&quot; | base64
+# Output: Y2Vvbm92YUBhZ2VudHNtYXJrZXQuY29tOnlvdXItc2VjdXJlLXBhc3N3b3Jk
+
+# 2. Use in header
+curl -X GET http://localhost:8000/api/v1/workers/ \
+  -H &quot;Authorization: Basic Y2Vvbm92YUBhZ2VudHNtYXJrZXQuY29tOnlvdXItc2VjdXJlLXBhc3N3b3Jk&quot;
+</code></pre>
+<h3 id="using-basic-auth-in-code">Using Basic Auth in Code</h3>
+<p><strong>Python (requests library):</strong></p>
+<pre><code class="language-python">import requests
+
+AUTH = (&quot;ceonova@agentsmarket.com&quot;, &quot;your-secure-password&quot;)
+
+response = requests.get(
+    &quot;http://localhost:8000/api/v1/workers/&quot;,
+    auth=AUTH
+)
+
+print(response.json())
+</code></pre>
+<p><strong>Python (manual header):</strong></p>
+<pre><code class="language-python">import base64
+import requests
+
+email = &quot;ceonova@agentsmarket.com&quot;
+password = &quot;your-secure-password&quot;
+credentials = base64.b64encode(f&quot;{email}:{password}&quot;.encode()).decode()
+
+headers = {
+    &quot;Authorization&quot;: f&quot;Basic {credentials}&quot;
+}
+
+response = requests.get(
+    &quot;http://localhost:8000/api/v1/workers/&quot;,
+    headers=headers
+)
+
+print(response.json())
+</code></pre>
+<p><strong>JavaScript (Fetch API):</strong></p>
+<pre><code class="language-javascript">const email = &quot;ceonova@agentsmarket.com&quot;;
+const password = &quot;your-secure-password&quot;;
+const credentials = btoa(`${email}:${password}`);
+
+const response = await fetch(&quot;http://localhost:8000/api/v1/workers/&quot;, {
+  headers: {
+    &quot;Authorization&quot;: `Basic ${credentials}`
+  }
+});
+
+const data = await response.json();
+console.log(data);
+</code></pre>
+<hr />
+<h2 id="method-2-jwt-bearer-token">Method 2: JWT Bearer Token</h2>
+<h3 id="how-it-works_1">How It Works</h3>
+<ol>
+<li>Exchange email + password for a JWT token</li>
+<li>Use token in <code>Authorization: Bearer</code> header</li>
+<li>Token expires after 30 minutes (need to refresh/re-login)</li>
+</ol>
+<h3 id="obtaining-a-bearer-token">Obtaining a Bearer Token</h3>
+<pre><code class="language-bash">curl -X POST http://localhost:8000/api/v1/auth/token \
+  -H &quot;Content-Type: application/x-www-form-urlencoded&quot; \
+  -d &quot;username=ceonova@agentsmarket.com&amp;password=your-secure-password&quot;
+</code></pre>
+<p><strong>Response:</strong></p>
+<pre><code class="language-json">{
+  &quot;access_token&quot;: &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjZW9ub3ZhQGFnZW50c21hcmtldC5jb20iLCJleHAiOjE3NDg1MzIwMDB9.abc123xyz&quot;,
+  &quot;token_type&quot;: &quot;bearer&quot;
+}
+</code></pre>
+<h3 id="using-bearer-token">Using Bearer Token</h3>
+<pre><code class="language-bash">curl -X GET http://localhost:8000/api/v1/workers/ \
+  -H &quot;Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjZW9ub3ZhQGFnZW50c21hcmtldC5jb20iLCJleHAiOjE3NDg1MzIwMDB9.abc123xyz&quot;
+</code></pre>
+<h3 id="token-expiry-refresh">Token Expiry &amp; Refresh</h3>
+<p>Tokens expire after <strong>30 minutes</strong>. When you get a 401:</p>
+<pre><code class="language-bash"># Token expired, obtain a new one
+curl -X POST http://localhost:8000/api/v1/auth/token \
+  -H &quot;Content-Type: application/x-www-form-urlencoded&quot; \
+  -d &quot;username=ceonova@agentsmarket.com&amp;password=your-secure-password&quot;
+
+# Use new token in next request
+</code></pre>
+<h3 id="python-example-with-token-refresh">Python Example with Token Refresh</h3>
+<pre><code class="language-python">import requests
+import json
+from datetime import datetime, timedelta
+
+class AgentsMarketClient:
+    def __init__(self, email, password, base_url=&quot;http://localhost:8000&quot;):
+        self.email = email
+        self.password = password
+        self.base_url = base_url
+        self.token = None
+        self.token_expiry = None
+
+    def get_token(self):
+        &quot;&quot;&quot;Obtain or refresh JWT token&quot;&quot;&quot;
+        response = requests.post(
+            f&quot;{self.base_url}/api/v1/auth/token&quot;,
+            data={
+                &quot;username&quot;: self.email,
+                &quot;password&quot;: self.password
+            }
+        )
+        data = response.json()
+        self.token = data[&quot;access_token&quot;]
+        # Assume 30-minute expiry
+        self.token_expiry = datetime.now() + timedelta(minutes=30)
+        return self.token
+
+    def ensure_token(self):
+        &quot;&quot;&quot;Refresh token if needed&quot;&quot;&quot;
+        if not self.token or datetime.now() &gt;= self.token_expiry:
+            self.get_token()
+
+    def get_workers(self):
+        &quot;&quot;&quot;List workers (with auto token refresh)&quot;&quot;&quot;
+        self.ensure_token()
+
+        response = requests.get(
+            f&quot;{self.base_url}/api/v1/workers/&quot;,
+            headers={&quot;Authorization&quot;: f&quot;Bearer {self.token}&quot;}
+        )
+        return response.json()
+
+# Usage
+client = AgentsMarketClient(
+    email=&quot;ceonova@agentsmarket.com&quot;,
+    password=&quot;your-secure-password&quot;
+)
+
+workers = client.get_workers()
+print(workers)
+</code></pre>
+<hr />
+<h2 id="comparison-basic-auth-vs-bearer-token">Comparison: Basic Auth vs Bearer Token</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Basic Auth</th>
+<th>Bearer Token</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Setup</strong></td>
+<td>Just email + password</td>
+<td>Email + password, exchange for token</td>
+</tr>
+<tr>
+<td><strong>Expiry</strong></td>
+<td>No (until password rotated)</td>
+<td>30 minutes</td>
+</tr>
+<tr>
+<td><strong>Refresh</strong></td>
+<td>None</td>
+<td>Obtain new token</td>
+</tr>
+<tr>
+<td><strong>Use Case</strong></td>
+<td>Service-to-service</td>
+<td>Humans, browsers, apps</td>
+</tr>
+<tr>
+<td><strong>Complexity</strong></td>
+<td>Simple</td>
+<td>Moderate</td>
+</tr>
+<tr>
+<td><strong>Security</strong></td>
+<td>Good (use HTTPS)</td>
+<td>Better (time-limited)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="security-best-practices">Security Best Practices</h2>
+<h3 id="1-never-hardcode-credentials">1. Never Hardcode Credentials</h3>
+<p><strong>❌ Bad:</strong></p>
+<pre><code class="language-python">import requests
+response = requests.get(
+    &quot;http://localhost:8000/api/v1/workers/&quot;,
+    auth=(&quot;ceonova@agentsmarket.com&quot;, &quot;password123&quot;)  # DON'T DO THIS
+)
+</code></pre>
+<p><strong>✅ Good:</strong></p>
+<pre><code class="language-python">import os
+import requests
+
+email = os.getenv(&quot;CEONOVA_EMAIL&quot;)
+password = os.getenv(&quot;CEONOVA_PASSWORD&quot;)
+
+response = requests.get(
+    &quot;http://localhost:8000/api/v1/workers/&quot;,
+    auth=(email, password)
+)
+</code></pre>
+<h3 id="2-use-https-in-production">2. Use HTTPS in Production</h3>
+<p>Basic Auth sends credentials in the <code>Authorization</code> header. Always use HTTPS to encrypt the header.</p>
+<pre><code class="language-bash"># ❌ Insecure (HTTP)
+curl -u &quot;user@example.com:password&quot; http://api.example.com/workers/
+
+# ✅ Secure (HTTPS)
+curl -u &quot;user@example.com:password&quot; https://api.example.com/workers/
+</code></pre>
+<h3 id="3-rotate-credentials-periodically">3. Rotate Credentials Periodically</h3>
+<p>Change your password every <strong>3-6 months</strong> to reduce risk of compromise.</p>
+<pre><code class="language-bash"># Contact AgentsMarket admin to change password
+# (API endpoint for password change TBD)
+</code></pre>
+<h3 id="4-mask-credentials-in-logs">4. Mask Credentials in Logs</h3>
+<p>When logging requests, don't include auth headers:</p>
+<p><strong>❌ Bad:</strong></p>
+<pre><code class="language-python">print(f&quot;Request: {response.request.headers}&quot;)  # Shows auth header!
+</code></pre>
+<p><strong>✅ Good:</strong></p>
+<pre><code class="language-python">import copy
+headers = copy.copy(response.request.headers)
+headers.pop(&quot;Authorization&quot;, None)  # Remove auth header before logging
+print(f&quot;Request headers: {headers}&quot;)
+</code></pre>
+<h3 id="5-dont-expose-credentials-in-frontend">5. Don't Expose Credentials in Frontend</h3>
+<p>If building a web UI, never send credentials from browser to AgentsMarket. Instead:</p>
+<ol>
+<li>Browser sends credentials to your CEONOVA backend</li>
+<li>Backend authenticates &amp; verifies</li>
+<li>Backend calls AgentsMarket API on behalf of user</li>
+<li>Backend returns results to browser</li>
+</ol>
+<pre><code>Browser → CEONOVA Backend (credentials) → AgentsMarket API
+</code></pre>
+<hr />
+<h2 id="environment-variable-setup">Environment Variable Setup</h2>
+<h3 id="using-env-file-development">Using .env File (Development)</h3>
+<p>Create <code>.env</code> at project root:</p>
+<pre><code class="language-env">CEONOVA_EMAIL=ceonova@agentsmarket.com
+CEONOVA_PASSWORD=your-secure-password
+AGENTSMARKET_API_BASE=http://localhost:8000
+</code></pre>
+<p>Load in code:</p>
+<pre><code class="language-python">import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+email = os.getenv(&quot;CEONOVA_EMAIL&quot;)
+password = os.getenv(&quot;CEONOVA_PASSWORD&quot;)
+api_base = os.getenv(&quot;AGENTSMARKET_API_BASE&quot;)
+</code></pre>
+<h3 id="using-shell-environment-production">Using Shell Environment (Production)</h3>
+<pre><code class="language-bash">export CEONOVA_EMAIL=ceonova@agentsmarket.com
+export CEONOVA_PASSWORD=your-secure-password
+export AGENTSMARKET_API_BASE=https://api.agentsmarket.com
+
+python your_script.py
+</code></pre>
+<h3 id="using-docker">Using Docker</h3>
+<p>In <code>docker-compose.yml</code>:</p>
+<pre><code class="language-yaml">services:
+  ceonova-integration:
+    image: ceonova-app:latest
+    environment:
+      CEONOVA_EMAIL: ${CEONOVA_EMAIL}
+      CEONOVA_PASSWORD: ${CEONOVA_PASSWORD}
+      AGENTSMARKET_API_BASE: ${AGENTSMARKET_API_BASE}
+</code></pre>
+<p>Run:</p>
+<pre><code class="language-bash">CEONOVA_EMAIL=... CEONOVA_PASSWORD=... docker-compose up
+</code></pre>
+<hr />
+<h2 id="testing-authentication">Testing Authentication</h2>
+<h3 id="verify-credentials-work">Verify Credentials Work</h3>
+<pre><code class="language-bash"># Test HTTP Basic Auth
+curl -v -u &quot;ceonova@agentsmarket.com:your-secure-password&quot; \
+  http://localhost:8000/api/v1/workers/
+
+# Look for:
+# &gt; Authorization: Basic ...
+# &lt; 200 OK (success)
+# &lt; 401 Unauthorized (bad credentials)
+</code></pre>
+<h3 id="debug-failed-authentication">Debug Failed Authentication</h3>
+<pre><code class="language-bash"># Verbose output shows headers
+curl -v -u &quot;ceonova@agentsmarket.com:password&quot; \
+  http://localhost:8000/api/v1/workers/
+
+# Check:
+# 1. Email spelling (case-sensitive)
+# 2. Password correctness
+# 3. HTTPS in production (not HTTP)
+# 4. Authorization header format
+
+# If 401 Unauthorized:
+# - Try bearer token approach
+# - Contact AgentsMarket support to verify account exists
+</code></pre>
+<hr />
+<h2 id="whats-next">What's Next?</h2>
+<p>→ <strong><a href="../../api-guide/01-api-overview/">API Reference</a></strong> — Learn all available endpoints</p>
+<p>→ <strong><a href="../../integration-patterns/code-examples/01-curl/">Code Examples</a></strong> — Ready-to-use samples</p>
+<p>→ <strong><a href="../../operations/01-troubleshooting/">Troubleshooting</a></strong> — Solve common issues</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../01-introduction/" class="btn btn-neutral float-left" title="Introduction"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../api-guide/01-api-overview/" class="btn btn-neutral float-right" title="Overview">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../01-introduction/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../../api-guide/01-api-overview/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

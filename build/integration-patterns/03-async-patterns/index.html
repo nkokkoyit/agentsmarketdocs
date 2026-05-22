@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Async Patterns & Webhooks - AgentsMarket Integration Documentation</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Async Patterns \u0026 Webhooks";
+        var mkdocs_page_input_path = "integration-patterns\\03-async-patterns.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> AgentsMarket Integration Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../getting-started/01-introduction/">Introduction</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../getting-started/02-authentication/">Authentication</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">API Guide</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api-guide/01-api-overview/">Overview</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Integration Patterns</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" >Code Examples</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../code-examples/01-curl/">cURL</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../code-examples/02-python/">Python</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../code-examples/03-javascript/">JavaScript</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../02-workflows/">Workflows</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Async Patterns & Webhooks</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#current-v1-polling">Current (v1): Polling</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#polling-overview">Polling Overview</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#polling-best-practices">Polling Best Practices</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#1-exponential-backoff">1. Exponential Backoff</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#2-circuit-breaker">2. Circuit Breaker</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#3-idempotent-processing">3. Idempotent Processing</a>
+    </li>
+        </ul>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#future-q3-2026-webhooks">Future (Q3 2026): Webhooks</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#webhook-contract-preview">Webhook Contract (Preview)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#signature-verification-preview">Signature Verification (Preview)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#webhook-receiver-flask-example">Webhook Receiver (Flask Example)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#webhook-vs-polling">Webhook vs. Polling</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#asyncawait-pattern-javascript">Async/Await Pattern (JavaScript)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#dead-letter-queue-pattern">Dead-Letter Queue Pattern</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#monitoring-observability">Monitoring &amp; Observability</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#requestresponse-logging">Request/Response Logging</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#metrics">Metrics</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Operations</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../operations/01-troubleshooting/">Troubleshooting & Operations</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Architecture</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../architecture/01-system-overview/">System Overview</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Reference</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../reference/glossary/">Glossary</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../reference/openapi.yaml">OpenAPI Specification</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">AgentsMarket Integration Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Integration Patterns</li>
+      <li class="breadcrumb-item active">Async Patterns & Webhooks</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="async-patterns-webhooks">Async Patterns &amp; Webhooks</h1>
+<p><strong>Implement robust async communication with AgentsMarket</strong></p>
+<hr />
+<h2 id="current-v1-polling">Current (v1): Polling</h2>
+<p>AgentsMarket v1 uses <strong>polling</strong> for task status updates. Webhooks are planned for Q3 2026.</p>
+<h3 id="polling-overview">Polling Overview</h3>
+<p>Client periodically calls <code>/api/v1/workers/{worker_id}/tasks/{task_id}</code> to check status.</p>
+<p><strong>Pros:</strong>
+- Simple to implement
+- No callback endpoint required
+- Easy to debug</p>
+<p><strong>Cons:</strong>
+- Latency: Min 2-5 seconds (poll interval)
+- Network cost: Steady polling drain
+- Throughput: Max ~1 task/2 sec per connection</p>
+<h3 id="polling-best-practices">Polling Best Practices</h3>
+<h4 id="1-exponential-backoff">1. Exponential Backoff</h4>
+<p>Start with short delay, increase gradually:</p>
+<pre><code class="language-python">def poll_with_backoff(worker_id, task_id, max_retries=30):
+    delay = 2  # Start 2 seconds
+
+    for attempt in range(max_retries):
+        response = requests.get(
+            f&quot;http://localhost:8000/api/v1/workers/{worker_id}/tasks/{task_id}&quot;,
+            auth=AUTH
+        )
+        task = response.json()
+
+        if task[&quot;status&quot;] in [&quot;done&quot;, &quot;failed&quot;]:
+            return task
+
+        print(f&quot;Waiting {delay}s before retry...&quot;)
+        time.sleep(delay)
+        delay = min(delay * 2, 30)  # Double each time, cap at 30s
+
+    raise TimeoutError(&quot;Polling timeout&quot;)
+</code></pre>
+<p><strong>Benefits:</strong>
+- Reduces server load (fewer early polls)
+- Still responsive (short initial delay)
+- Handles slow workers gracefully (long max delay)</p>
+<h4 id="2-circuit-breaker">2. Circuit Breaker</h4>
+<p>Stop polling if task is stuck:</p>
+<pre><code class="language-python">def poll_with_circuit_breaker(worker_id, task_id):
+    max_age_minutes = 10
+
+    # Get task
+    response = requests.get(
+        f&quot;http://localhost:8000/api/v1/workers/{worker_id}/tasks/{task_id}&quot;,
+        auth=AUTH
+    )
+    task = response.json()
+
+    # Check age
+    created = datetime.fromisoformat(task[&quot;created_at&quot;].replace(&quot;Z&quot;, &quot;+00:00&quot;))
+    age = datetime.now(timezone.utc) - created
+
+    if age.total_seconds() &gt; max_age_minutes * 60:
+        raise Exception(f&quot;Task exceeded max age ({max_age_minutes} min)&quot;)
+
+    return task
+</code></pre>
+<h4 id="3-idempotent-processing">3. Idempotent Processing</h4>
+<p>Handle duplicate results safely:</p>
+<pre><code class="language-python">def process_result_idempotent(task_id, result):
+    &quot;&quot;&quot;Process result only once&quot;&quot;&quot;
+
+    # Check if already processed
+    if is_processed(task_id):
+        print(f&quot;Task {task_id} already processed, skipping&quot;)
+        return
+
+    # Process
+    handle_result(result)
+
+    # Mark as processed
+    mark_processed(task_id)
+
+def is_processed(task_id):
+    &quot;&quot;&quot;Check processing status in DB&quot;&quot;&quot;
+    return db.processed_tasks.exists(task_id)
+
+def mark_processed(task_id):
+    &quot;&quot;&quot;Record that we processed this task&quot;&quot;&quot;
+    db.processed_tasks.set(task_id, datetime.now())
+</code></pre>
+<hr />
+<h2 id="future-q3-2026-webhooks">Future (Q3 2026): Webhooks</h2>
+<h3 id="webhook-contract-preview">Webhook Contract (Preview)</h3>
+<p>When task status changes, AgentsMarket will POST to your webhook endpoint:</p>
+<pre><code class="language-json">{
+  &quot;event&quot;: &quot;task_status_changed&quot;,
+  &quot;task_id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;,
+  &quot;worker_id&quot;: &quot;recruitment_v1&quot;,
+  &quot;status&quot;: &quot;done&quot;,
+  &quot;result&quot;: {
+    &quot;overall_score&quot;: 85,
+    &quot;decision&quot;: &quot;PASS&quot;
+  },
+  &quot;timestamp&quot;: &quot;2026-05-23T10:35:00Z&quot;,
+  &quot;attempt&quot;: 1
+}
+</code></pre>
+<h3 id="signature-verification-preview">Signature Verification (Preview)</h3>
+<p>Header: <code>X-AgentsMarket-Signature: sha256=&lt;hmac_hash&gt;</code></p>
+<pre><code class="language-python">import hmac
+import hashlib
+
+def verify_webhook_signature(request, webhook_secret):
+    &quot;&quot;&quot;Verify webhook came from AgentsMarket&quot;&quot;&quot;
+
+    signature = request.headers.get(&quot;X-AgentsMarket-Signature&quot;, &quot;&quot;)
+    body = request.get_data()
+
+    # Compute expected signature
+    expected = &quot;sha256=&quot; + hmac.new(
+        webhook_secret.encode(),
+        body,
+        hashlib.sha256
+    ).hexdigest()
+
+    # Compare (constant-time)
+    if not hmac.compare_digest(signature, expected):
+        raise ValueError(&quot;Invalid signature&quot;)
+
+    return True
+</code></pre>
+<h3 id="webhook-receiver-flask-example">Webhook Receiver (Flask Example)</h3>
+<pre><code class="language-python">from flask import Flask, request
+import json
+import hmac
+import hashlib
+
+app = Flask(__name__)
+WEBHOOK_SECRET = &quot;your-webhook-secret-from-settings&quot;
+
+@app.route(&quot;/webhooks/agentsmarket&quot;, methods=[&quot;POST&quot;])
+def handle_webhook():
+    &quot;&quot;&quot;Receive task status updates&quot;&quot;&quot;
+
+    # 1. Verify signature
+    try:
+        verify_webhook_signature(request, WEBHOOK_SECRET)
+    except ValueError:
+        return {&quot;error&quot;: &quot;Invalid signature&quot;}, 401
+
+    # 2. Parse payload
+    payload = request.get_json()
+    task_id = payload[&quot;task_id&quot;]
+    status = payload[&quot;status&quot;]
+    result = payload.get(&quot;result&quot;)
+    attempt = payload.get(&quot;attempt&quot;, 1)
+
+    # 3. Idempotency check (handle retries)
+    if is_webhook_processed(task_id, attempt):
+        print(f&quot;Duplicate webhook (task {task_id}, attempt {attempt}), ignoring&quot;)
+        return {&quot;status&quot;: &quot;ok&quot;}, 200
+
+    # 4. Process result
+    if status == &quot;done&quot;:
+        handle_task_done(task_id, result)
+    elif status == &quot;failed&quot;:
+        handle_task_failed(task_id, result)
+
+    # 5. Acknowledge receipt
+    mark_webhook_processed(task_id, attempt)
+    return {&quot;status&quot;: &quot;ok&quot;}, 200
+
+def is_webhook_processed(task_id, attempt):
+    &quot;&quot;&quot;Check if we've already processed this webhook&quot;&quot;&quot;
+    key = f&quot;webhook:{task_id}:{attempt}&quot;
+    return cache.exists(key)
+
+def mark_webhook_processed(task_id, attempt):
+    &quot;&quot;&quot;Record that we've processed this webhook&quot;&quot;&quot;
+    key = f&quot;webhook:{task_id}:{attempt}&quot;
+    cache.set(key, True, ttl=3600)  # Expire after 1 hour
+
+def handle_task_done(task_id, result):
+    print(f&quot;✅ Task {task_id} done&quot;)
+    print(f&quot;Score: {result['overall_score']}, Decision: {result['decision']}&quot;)
+    # Update DB, trigger notifications, etc.
+
+def handle_task_failed(task_id, result):
+    print(f&quot;❌ Task {task_id} failed&quot;)
+    print(f&quot;Error: {result['error']}&quot;)
+    # Log error, retry, escalate, etc.
+</code></pre>
+<h3 id="webhook-vs-polling">Webhook vs. Polling</h3>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Polling</th>
+<th>Webhooks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Latency</strong></td>
+<td>2-5s (poll interval)</td>
+<td>&lt;100ms (push)</td>
+</tr>
+<tr>
+<td><strong>Throughput</strong></td>
+<td>Limited (rate limit)</td>
+<td>Many parallel tasks</td>
+</tr>
+<tr>
+<td><strong>Setup</strong></td>
+<td>Simple</td>
+<td>Requires endpoint</td>
+</tr>
+<tr>
+<td><strong>Complexity</strong></td>
+<td>Poll loop</td>
+<td>Signature verification, dedup, receiver</td>
+</tr>
+<tr>
+<td><strong>Network</strong></td>
+<td>Steady polling</td>
+<td>Only on state change</td>
+</tr>
+<tr>
+<td><strong>Failure recovery</strong></td>
+<td>Client-side retry</td>
+<td>AgentsMarket retries</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="asyncawait-pattern-javascript">Async/Await Pattern (JavaScript)</h2>
+<pre><code class="language-javascript">async function waitForTask(workerId, taskId) {
+  let delay = 2000;  // 2 seconds
+
+  for (let attempt = 1; attempt &lt;= 30; attempt++) {
+    const task = await fetch(
+      `http://localhost:8000/api/v1/workers/${workerId}/tasks/${taskId}`,
+      { headers: authHeaders }
+    ).then(r =&gt; r.json());
+
+    console.log(`[${attempt}] Status: ${task.status}`);
+
+    if ([&quot;done&quot;, &quot;failed&quot;].includes(task.status)) {
+      return task;
+    }
+
+    await new Promise(resolve =&gt; setTimeout(resolve, delay));
+    delay = Math.min(delay * 2, 30000);  // Exponential backoff
+  }
+
+  throw new Error(&quot;Polling timeout&quot;);
+}
+
+// Usage
+const task = await waitForTask(&quot;recruitment_v1&quot;, taskId);
+console.log(`Result:`, task.result);
+</code></pre>
+<hr />
+<h2 id="dead-letter-queue-pattern">Dead-Letter Queue Pattern</h2>
+<p>Handle failed tasks separately:</p>
+<pre><code class="language-python">from collections import deque
+from datetime import datetime
+
+class TaskQueue:
+    def __init__(self):
+        self.pending = deque()
+        self.dead_letter = deque()
+
+    def submit(self, task_data):
+        task_id = submit_task(**task_data)
+        self.pending.append({
+            &quot;task_id&quot;: task_id,
+            &quot;data&quot;: task_data,
+            &quot;submitted_at&quot;: datetime.now(),
+            &quot;attempt&quot;: 1
+        })
+        return task_id
+
+    def process_results(self):
+        &quot;&quot;&quot;Poll pending tasks, move failures to DLQ&quot;&quot;&quot;
+
+        while self.pending:
+            task_item = self.pending[0]
+            task_id = task_item[&quot;task_id&quot;]
+
+            try:
+                task = poll_task_once(worker_id, task_id)
+
+                if task[&quot;status&quot;] == &quot;done&quot;:
+                    self.pending.popleft()
+                    return task[&quot;result&quot;]
+
+                elif task[&quot;status&quot;] == &quot;failed&quot;:
+                    # Move to dead-letter queue
+                    self.pending.popleft()
+                    task_item[&quot;error&quot;] = task[&quot;result&quot;][&quot;error&quot;]
+                    self.dead_letter.append(task_item)
+                    print(f&quot;❌ Task {task_id} failed, moved to DLQ&quot;)
+
+            except Exception as e:
+                print(f&quot;⚠️  Poll error: {e}&quot;)
+
+            time.sleep(2)
+
+    def retry_dead_letter(self):
+        &quot;&quot;&quot;Retry failed tasks&quot;&quot;&quot;
+
+        while self.dead_letter:
+            task_item = self.dead_letter[0]
+
+            # Check retry limit
+            if task_item[&quot;attempt&quot;] &gt;= 3:
+                print(f&quot;⚠️  Task {task_item['task_id']} exceeded max retries&quot;)
+                self.dead_letter.popleft()
+                continue
+
+            # Retry
+            print(f&quot;🔄 Retrying task (attempt {task_item['attempt']+1}/3)&quot;)
+            task_item[&quot;attempt&quot;] += 1
+            task_id = submit_task(**task_item[&quot;data&quot;])
+            task_item[&quot;task_id&quot;] = task_id
+
+            # Move back to pending
+            self.pending.append(self.dead_letter.popleft())
+</code></pre>
+<hr />
+<h2 id="monitoring-observability">Monitoring &amp; Observability</h2>
+<h3 id="requestresponse-logging">Request/Response Logging</h3>
+<pre><code class="language-python">import logging
+import json
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+
+def log_request(method, url, **kwargs):
+    logger.debug(f&quot;{method} {url}&quot;)
+    if &quot;json&quot; in kwargs:
+        logger.debug(f&quot;  Body: {json.dumps(kwargs['json'], indent=2)}&quot;)
+
+def log_response(response):
+    logger.debug(f&quot;  Status: {response.status_code}&quot;)
+    try:
+        logger.debug(f&quot;  Body: {json.dumps(response.json(), indent=2)}&quot;)
+    except:
+        logger.debug(f&quot;  Body: {response.text[:500]}&quot;)
+</code></pre>
+<h3 id="metrics">Metrics</h3>
+<pre><code class="language-python">from time import time
+
+class TaskMetrics:
+    def __init__(self):
+        self.submitted = 0
+        self.completed = 0
+        self.failed = 0
+        self.total_time = 0
+
+    def record_submission(self):
+        self.submitted += 1
+
+    def record_completion(self, elapsed_seconds):
+        self.completed += 1
+        self.total_time += elapsed_seconds
+
+    def record_failure(self):
+        self.failed += 1
+
+    def summary(self):
+        avg_time = self.total_time / self.completed if self.completed &gt; 0 else 0
+        return {
+            &quot;submitted&quot;: self.submitted,
+            &quot;completed&quot;: self.completed,
+            &quot;failed&quot;: self.failed,
+            &quot;average_time_seconds&quot;: avg_time,
+            &quot;success_rate&quot;: f&quot;{self.completed/self.submitted*100:.1f}%&quot; if self.submitted &gt; 0 else &quot;N/A&quot;
+        }
+</code></pre>
+<hr />
+<h2 id="next-steps">Next Steps</h2>
+<p>→ <strong><a href="../../operations/01-troubleshooting/">Troubleshooting</a></strong> — Debug common issues</p>
+<p>→ <strong><a href="../code-examples/01-curl/">Code Examples</a></strong> — Working samples</p>
+<p>→ <strong><a href="../../operations/01-troubleshooting/">Operations</a></strong> — Monitoring &amp; alerts</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../02-workflows/" class="btn btn-neutral float-left" title="Workflows"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../operations/01-troubleshooting/" class="btn btn-neutral float-right" title="Troubleshooting & Operations">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../02-workflows/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../../operations/01-troubleshooting/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

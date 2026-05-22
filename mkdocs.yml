@@ -1,20 +1,40 @@
-site_name: Agent Market Documentation
-site_description: Documentation portal for the AI recruitment agent project
-docs_dir: docs
+site_name: AgentsMarket Integration Documentation
+site_description: Complete guide for integrating AgentsMarket with external platforms
+site_dir: build
 theme:
   name: readthedocs
+  features:
+    - search.highlight
+    - search.share
+
 nav:
-  - Home: README.md
-  - Application Spec: application-spec.md
-  - API Spec: api-spec.md
-  - Deployment Architecture: deployment-architecture.md
-  - Sequence Flow: sequence-flow.md
-  - Workflow Compliance: workflow-compliance.md
-  - Threat Model: threat-model.md
-  - Deployment Runbook: deployment-runbook.md
-  - Architecture Blueprint: PROJECT_ARCHITECTURE_BLUEPRINT.md
-  - Redis Message Layout: redis-message-layout.md
-  - ADR Candidates: adr-candidates.md
-  - Release Notes: release-notes.md
+  - Home: index.md
+  
+  - Getting Started:
+    - Introduction: getting-started/01-introduction.md
+    - Authentication: getting-started/02-authentication.md
+  
+  - API Guide:
+    - Overview: api-guide/01-api-overview.md
+  
+  - Integration Patterns:
+    - Code Examples:
+      - cURL: integration-patterns/code-examples/01-curl.md
+      - Python: integration-patterns/code-examples/02-python.md
+      - JavaScript: integration-patterns/code-examples/03-javascript.md
+    - Workflows: integration-patterns/02-workflows.md
+    - Async Patterns & Webhooks: integration-patterns/03-async-patterns.md
+  
+  - Operations:
+    - Troubleshooting & Operations: operations/01-troubleshooting.md
+  
+  - Architecture:
+    - System Overview: architecture/01-system-overview.md
+  
+  - Reference:
+    - Glossary: reference/glossary.md
+    - OpenAPI Specification: reference/openapi.yaml
+
 plugins:
-  - search
+  - search:
+      lang: en

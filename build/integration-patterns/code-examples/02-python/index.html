@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../../img/favicon.ico" />
+    <title>Python - AgentsMarket Integration Documentation</title>
+    <link rel="stylesheet" href="../../../css/theme.css" />
+    <link rel="stylesheet" href="../../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Python";
+        var mkdocs_page_input_path = "integration-patterns\\code-examples\\02-python.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../../.." class="icon icon-home"> AgentsMarket Integration Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../getting-started/01-introduction/">Introduction</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../getting-started/02-authentication/">Authentication</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">API Guide</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../api-guide/01-api-overview/">Overview</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Integration Patterns</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" >Code Examples</a>
+    <ul class="current">
+                <li class="toctree-l2"><a class="reference internal" href="../01-curl/">cURL</a>
+                </li>
+                <li class="toctree-l2 current"><a class="reference internal current" href="#">Python</a>
+    <ul class="current">
+    <li class="toctree-l3"><a class="reference internal" href="#setup">Setup</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#installation">Installation</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#configuration">Configuration</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-1-discover-workers">Example 1: Discover Workers</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-2-get-worker-details">Example 2: Get Worker Details</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-3-submit-a-task">Example 3: Submit a Task</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-4-list-users-tasks">Example 4: List User's Tasks</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-5-poll-task-status-single-poll">Example 5: Poll Task Status (Single Poll)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-6-poll-with-exponential-backoff">Example 6: Poll with Exponential Backoff</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-7-end-to-end-workflow">Example 7: End-to-End Workflow</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-8-batch-evaluation-parallel">Example 8: Batch Evaluation (Parallel)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-9-error-handling">Example 9: Error Handling</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-10-logging-monitoring">Example 10: Logging &amp; Monitoring</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#tips-best-practices">Tips &amp; Best Practices</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#use-environment-variables">Use Environment Variables</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#implement-retry-logic">Implement Retry Logic</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#use-context-managers-for-resources">Use Context Managers for Resources</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#validate-responses">Validate Responses</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#next-steps">Next Steps</a>
+    </li>
+    </ul>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../03-javascript/">JavaScript</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../02-workflows/">Workflows</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../03-async-patterns/">Async Patterns & Webhooks</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Operations</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../operations/01-troubleshooting/">Troubleshooting & Operations</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Architecture</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../architecture/01-system-overview/">System Overview</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Reference</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../reference/glossary/">Glossary</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../reference/openapi.yaml">OpenAPI Specification</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../..">AgentsMarket Integration Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Integration Patterns</li>
+          <li class="breadcrumb-item">Code Examples</li>
+      <li class="breadcrumb-item active">Python</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="python-examples">Python Examples</h1>
+<p><strong>Ready-to-use Python samples using requests library</strong></p>
+<hr />
+<h2 id="setup">Setup</h2>
+<h3 id="installation">Installation</h3>
+<pre><code class="language-bash">pip install requests python-dotenv
+</code></pre>
+<h3 id="configuration">Configuration</h3>
+<p>Create a file <code>agentsmarket.py</code>:</p>
+<pre><code class="language-python">import os
+import base64
+import requests
+import time
+from typing import Optional, Dict, Any
+from dotenv import load_dotenv
+
+load_dotenv()
+
+API_BASE = os.getenv(&quot;AGENTSMARKET_API&quot;, &quot;http://localhost:8000&quot;)
+AUTH_EMAIL = os.getenv(&quot;CEONOVA_EMAIL&quot;, &quot;ceonova@agentsmarket.com&quot;)
+AUTH_PASSWORD = os.getenv(&quot;CEONOVA_PASSWORD&quot;, &quot;your-password&quot;)
+
+AUTH = (AUTH_EMAIL, AUTH_PASSWORD)
+</code></pre>
+<p>Create <code>.env</code> file:</p>
+<pre><code class="language-env">AGENTSMARKET_API=http://localhost:8000
+CEONOVA_EMAIL=ceonova@agentsmarket.com
+CEONOVA_PASSWORD=your-password
+</code></pre>
+<hr />
+<h2 id="example-1-discover-workers">Example 1: Discover Workers</h2>
+<pre><code class="language-python">def discover_workers() -&gt; Dict[str, Any]:
+    &quot;&quot;&quot;List all available workers&quot;&quot;&quot;
+    response = requests.get(
+        f&quot;{API_BASE}/api/v1/workers/&quot;,
+        auth=AUTH
+    )
+    response.raise_for_status()  # Raise exception if status != 200
+    return response.json()
+
+# Usage
+workers = discover_workers()
+for worker in workers[&quot;workers&quot;]:
+    print(f&quot;✓ {worker['worker_id']}: {worker['name']}&quot;)
+    print(f&quot;  Capabilities: {', '.join(worker['capabilities'])}&quot;)
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>✓ recruitment_v1: Recruitment Screening
+  Capabilities: screening, skill_matching, scoring, recommendation
+✓ marketing_strategy: Marketing Strategy
+  Capabilities: market_research, competitive_analysis, campaign_planning, content_creation
+</code></pre>
+<hr />
+<h2 id="example-2-get-worker-details">Example 2: Get Worker Details</h2>
+<pre><code class="language-python">def get_worker_details(worker_id: str) -&gt; Dict[str, Any]:
+    &quot;&quot;&quot;Retrieve detailed info about a worker&quot;&quot;&quot;
+    response = requests.get(
+        f&quot;{API_BASE}/api/v1/workers/{worker_id}&quot;,
+        auth=AUTH
+    )
+    response.raise_for_status()
+    return response.json()
+
+# Usage
+worker = get_worker_details(&quot;recruitment_v1&quot;)
+print(f&quot;Name: {worker['name']}&quot;)
+print(f&quot;Description: {worker['description']}&quot;)
+print(f&quot;Capabilities: {worker['capabilities']}&quot;)
+</code></pre>
+<hr />
+<h2 id="example-3-submit-a-task">Example 3: Submit a Task</h2>
+<pre><code class="language-python">def submit_task(
+    worker_id: str,
+    title: str,
+    objective: str,
+    external_user_id: str,
+    context: Optional[str] = None,
+    expected_output: Optional[str] = None
+) -&gt; Dict[str, str]:
+    &quot;&quot;&quot;Submit a task to a worker&quot;&quot;&quot;
+
+    payload = {
+        &quot;title&quot;: title,
+        &quot;objective&quot;: objective,
+        &quot;external_user_id&quot;: external_user_id,
+    }
+
+    if context:
+        payload[&quot;context&quot;] = context
+    if expected_output:
+        payload[&quot;expected_output&quot;] = expected_output
+
+    response = requests.post(
+        f&quot;{API_BASE}/api/v1/workers/{worker_id}/tasks&quot;,
+        json=payload,
+        auth=AUTH
+    )
+
+    if response.status_code == 202:
+        return response.json()  # {&quot;task_id&quot;: &quot;...&quot;, &quot;worker_id&quot;: &quot;...&quot;}
+    else:
+        raise Exception(f&quot;Submit failed ({response.status_code}): {response.text}&quot;)
+
+# Usage
+task = submit_task(
+    worker_id=&quot;recruitment_v1&quot;,
+    title=&quot;Screen Alice Johnson for Senior Engineer&quot;,
+    objective=&quot;Evaluate candidate fit for role&quot;,
+    external_user_id=&quot;ceonova-user-456&quot;,
+    context=&quot;Job: Senior Backend Engineer, 5+ years Python, Docker, AWS&quot;,
+    expected_output=&quot;Score (0-100) and recommendation (PASS/MAYBE/REJECT)&quot;
+)
+
+print(f&quot;✓ Task submitted!&quot;)
+print(f&quot;  Task ID: {task['task_id']}&quot;)
+print(f&quot;  Worker: {task['worker_id']}&quot;)
+</code></pre>
+<hr />
+<h2 id="example-4-list-users-tasks">Example 4: List User's Tasks</h2>
+<pre><code class="language-python">def list_user_tasks(
+    worker_id: str,
+    external_user_id: str,
+    limit: int = 20,
+    offset: int = 0
+) -&gt; Dict[str, Any]:
+    &quot;&quot;&quot;List all tasks submitted by a CEONova user&quot;&quot;&quot;
+
+    params = {
+        &quot;external_user_id&quot;: external_user_id,
+        &quot;limit&quot;: limit,
+        &quot;offset&quot;: offset
+    }
+
+    response = requests.get(
+        f&quot;{API_BASE}/api/v1/workers/{worker_id}/tasks&quot;,
+        params=params,
+        auth=AUTH
+    )
+    response.raise_for_status()
+    return response.json()
+
+# Usage
+tasks = list_user_tasks(
+    worker_id=&quot;recruitment_v1&quot;,
+    external_user_id=&quot;ceonova-user-456&quot;,
+    limit=10
+)
+
+print(f&quot;Total tasks: {tasks['total']}&quot;)
+for task in tasks[&quot;items&quot;]:
+    print(f&quot;  • {task['task_id']}: {task['status']}&quot;)
+</code></pre>
+<hr />
+<h2 id="example-5-poll-task-status-single-poll">Example 5: Poll Task Status (Single Poll)</h2>
+<pre><code class="language-python">def poll_task_once(
+    worker_id: str,
+    task_id: str,
+    external_user_id: Optional[str] = None
+) -&gt; Dict[str, Any]:
+    &quot;&quot;&quot;Check task status once&quot;&quot;&quot;
+
+    params = {}
+    if external_user_id:
+        params[&quot;external_user_id&quot;] = external_user_id
+
+    response = requests.get(
+        f&quot;{API_BASE}/api/v1/workers/{worker_id}/tasks/{task_id}&quot;,
+        params=params,
+        auth=AUTH
+    )
+    response.raise_for_status()
+    return response.json()
+
+# Usage
+task = poll_task_once(&quot;recruitment_v1&quot;, &quot;550e8400-e29b-41d4-a716-446655440000&quot;)
+print(f&quot;Status: {task['status']}&quot;)
+if task['status'] == 'done':
+    print(f&quot;Result: {task['result']}&quot;)
+</code></pre>
+<hr />
+<h2 id="example-6-poll-with-exponential-backoff">Example 6: Poll with Exponential Backoff</h2>
+<pre><code class="language-python">def poll_task_status(
+    worker_id: str,
+    task_id: str,
+    max_retries: int = 30,
+    initial_delay: float = 2.0
+) -&gt; Dict[str, Any]:
+    &quot;&quot;&quot;Poll task status with exponential backoff&quot;&quot;&quot;
+
+    delay = initial_delay
+
+    for attempt in range(1, max_retries + 1):
+        print(f&quot;[Attempt {attempt}/{max_retries}] Polling task status...&quot;)
+
+        try:
+            task = poll_task_once(worker_id, task_id)
+            status = task[&quot;status&quot;]
+
+            print(f&quot;  Status: {status}&quot;)
+
+            # Task complete
+            if status in [&quot;done&quot;, &quot;failed&quot;]:
+                return task
+
+            # Still running, wait and retry
+            if attempt &lt; max_retries:
+                print(f&quot;  Waiting {delay}s before retry...&quot;)
+                time.sleep(delay)
+                delay = min(delay * 2, 30)  # Exponential backoff, cap at 30s
+
+        except requests.exceptions.RequestException as e:
+            print(f&quot;  Error: {e}&quot;)
+            if attempt == max_retries:
+                raise
+            time.sleep(delay)
+
+    raise TimeoutError(f&quot;Task polling timeout after {max_retries} attempts&quot;)
+
+# Usage
+task = poll_task_status(&quot;recruitment_v1&quot;, &quot;550e8400-e29b-41d4-a716-446655440000&quot;)
+print(f&quot;\n✓ Task complete!&quot;)
+print(f&quot;  Final status: {task['status']}&quot;)
+if task['status'] == 'done':
+    print(f&quot;  Result: {task['result']}&quot;)
+</code></pre>
+<hr />
+<h2 id="example-7-end-to-end-workflow">Example 7: End-to-End Workflow</h2>
+<pre><code class="language-python">def evaluate_candidate(
+    candidate_name: str,
+    candidate_info: str,
+    job_description: str,
+    external_user_id: str
+) -&gt; Dict[str, Any]:
+    &quot;&quot;&quot;Submit task and wait for result (blocking)&quot;&quot;&quot;
+
+    print(f&quot;Evaluating {candidate_name}...&quot;)
+    print(&quot;=&quot; * 50)
+
+    # Step 1: Submit task
+    print(f&quot;\n1. Submitting task...&quot;)
+    task = submit_task(
+        worker_id=&quot;recruitment_v1&quot;,
+        title=f&quot;Screen {candidate_name} for recruitment&quot;,
+        objective=&quot;Evaluate candidate fit for the role&quot;,
+        external_user_id=external_user_id,
+        context=f&quot;Job: {job_description}\n\nCandidate: {candidate_info}&quot;,
+        expected_output=&quot;Score (0-100) and recommendation (PASS/MAYBE/REJECT)&quot;
+    )
+
+    print(f&quot;   ✓ Task ID: {task['task_id']}&quot;)
+
+    # Step 2: Poll for result
+    print(f&quot;\n2. Waiting for result...&quot;)
+    final_task = poll_task_status(&quot;recruitment_v1&quot;, task[&quot;task_id&quot;])
+
+    # Step 3: Process result
+    print(f&quot;\n3. Result:&quot;)
+    print(f&quot;   Status: {final_task['status']}&quot;)
+
+    if final_task['status'] == 'done':
+        result = final_task['result']
+        print(f&quot;   Score: {result.get('overall_score')}/100&quot;)
+        print(f&quot;   Decision: {result.get('decision')}&quot;)
+        print(f&quot;   Reasoning: {result.get('reasoning')}&quot;)
+    elif final_task['status'] == 'failed':
+        print(f&quot;   Error: {final_task['result'].get('error')}&quot;)
+
+    print(&quot;=&quot; * 50)
+    return final_task
+
+# Usage
+result = evaluate_candidate(
+    candidate_name=&quot;Alice Johnson&quot;,
+    candidate_info=&quot;7 years Python experience, 3 years Docker, 2 years Kubernetes&quot;,
+    job_description=&quot;Senior Backend Engineer - 5+ years Python, Docker, AWS required&quot;,
+    external_user_id=&quot;ceonova-user-456&quot;
+)
+</code></pre>
+<hr />
+<h2 id="example-8-batch-evaluation-parallel">Example 8: Batch Evaluation (Parallel)</h2>
+<pre><code class="language-python">import concurrent.futures
+
+def evaluate_candidates_parallel(
+    candidates: list,
+    job_description: str,
+    external_user_id: str,
+    max_workers: int = 5
+) -&gt; list:
+    &quot;&quot;&quot;Evaluate multiple candidates in parallel&quot;&quot;&quot;
+
+    print(f&quot;Evaluating {len(candidates)} candidates in parallel...&quot;)
+    print(f&quot;Max concurrent tasks: {max_workers}&quot;)
+    print(&quot;=&quot; * 50)
+
+    results = []
+
+    def evaluate_one(candidate):
+        &quot;&quot;&quot;Evaluate single candidate&quot;&quot;&quot;
+        name = candidate[&quot;name&quot;]
+        info = candidate[&quot;info&quot;]
+
+        print(f&quot;\n→ {name}: Submitting...&quot;)
+        task = submit_task(
+            worker_id=&quot;recruitment_v1&quot;,
+            title=f&quot;Screen {name}&quot;,
+            objective=&quot;Evaluate candidate fit&quot;,
+            external_user_id=external_user_id,
+            context=f&quot;Job: {job_description}\n\nCandidate: {info}&quot;,
+            expected_output=&quot;Score and recommendation&quot;
+        )
+        return {&quot;candidate&quot;: name, &quot;task_id&quot;: task[&quot;task_id&quot;]}
+
+    # Submit all tasks in parallel
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+        submit_results = list(executor.map(evaluate_one, candidates))
+
+    print(f&quot;\n✓ All {len(submit_results)} tasks submitted!&quot;)
+    print(&quot;=&quot; * 50)
+    print(&quot;\nPolling for results...&quot;)
+    print(&quot;-&quot; * 50)
+
+    # Poll all tasks in parallel
+    def poll_one(submit_result):
+        &quot;&quot;&quot;Poll single task&quot;&quot;&quot;
+        candidate = submit_result[&quot;candidate&quot;]
+        task_id = submit_result[&quot;task_id&quot;]
+
+        try:
+            task = poll_task_status(&quot;recruitment_v1&quot;, task_id, max_retries=60)
+            return {
+                &quot;candidate&quot;: candidate,
+                &quot;task_id&quot;: task_id,
+                &quot;status&quot;: task[&quot;status&quot;],
+                &quot;result&quot;: task.get(&quot;result&quot;)
+            }
+        except Exception as e:
+            return {
+                &quot;candidate&quot;: candidate,
+                &quot;task_id&quot;: task_id,
+                &quot;status&quot;: &quot;error&quot;,
+                &quot;error&quot;: str(e)
+            }
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+        results = list(executor.map(poll_one, submit_results))
+
+    # Display results
+    print(&quot;\n&quot; + &quot;=&quot; * 50)
+    print(&quot;RESULTS:&quot;)
+    print(&quot;=&quot; * 50)
+
+    for result in results:
+        status = result[&quot;status&quot;]
+        candidate = result[&quot;candidate&quot;]
+
+        if status == &quot;done&quot;:
+            r = result[&quot;result&quot;]
+            score = r.get(&quot;overall_score&quot;, &quot;?&quot;)
+            decision = r.get(&quot;decision&quot;, &quot;?&quot;)
+            print(f&quot;✓ {candidate}: {score}/100 - {decision}&quot;)
+        elif status == &quot;error&quot;:
+            print(f&quot;✗ {candidate}: ERROR - {result['error']}&quot;)
+        else:
+            print(f&quot;? {candidate}: {status}&quot;)
+
+    return results
+
+# Usage
+candidates = [
+    {&quot;name&quot;: &quot;Alice Johnson&quot;, &quot;info&quot;: &quot;7 yrs Python, 3 yrs Docker&quot;},
+    {&quot;name&quot;: &quot;Bob Smith&quot;, &quot;info&quot;: &quot;5 yrs Python, 1 yr Kubernetes&quot;},
+    {&quot;name&quot;: &quot;Carol White&quot;, &quot;info&quot;: &quot;10 yrs backend, AWS expert&quot;},
+]
+
+results = evaluate_candidates_parallel(
+    candidates=candidates,
+    job_description=&quot;Senior Backend Engineer - 5+ years Python required&quot;,
+    external_user_id=&quot;ceonova-team-1&quot;,
+    max_workers=3
+)
+</code></pre>
+<hr />
+<h2 id="example-9-error-handling">Example 9: Error Handling</h2>
+<pre><code class="language-python">def safe_submit_task(
+    worker_id: str,
+    title: str,
+    objective: str,
+    external_user_id: str
+) -&gt; Dict[str, Any]:
+    &quot;&quot;&quot;Submit with proper error handling&quot;&quot;&quot;
+
+    try:
+        task = submit_task(
+            worker_id=worker_id,
+            title=title,
+            objective=objective,
+            external_user_id=external_user_id
+        )
+        return {&quot;success&quot;: True, &quot;data&quot;: task}
+
+    except requests.exceptions.HTTPError as e:
+        status_code = e.response.status_code
+
+        if status_code == 401:
+            return {
+                &quot;success&quot;: False,
+                &quot;error&quot;: &quot;Authentication failed&quot;,
+                &quot;reason&quot;: &quot;Check credentials in .env&quot;
+            }
+        elif status_code == 404:
+            return {
+                &quot;success&quot;: False,
+                &quot;error&quot;: &quot;Worker not found&quot;,
+                &quot;reason&quot;: &quot;List workers and verify worker_id&quot;
+            }
+        elif status_code == 422:
+            return {
+                &quot;success&quot;: False,
+                &quot;error&quot;: &quot;Invalid request&quot;,
+                &quot;reason&quot;: &quot;Check request body matches schema&quot;
+            }
+        elif status_code == 429:
+            return {
+                &quot;success&quot;: False,
+                &quot;error&quot;: &quot;Rate limited&quot;,
+                &quot;reason&quot;: &quot;Wait 1 minute before retrying&quot;
+            }
+        else:
+            return {
+                &quot;success&quot;: False,
+                &quot;error&quot;: f&quot;HTTP {status_code}&quot;,
+                &quot;reason&quot;: str(e)
+            }
+
+    except Exception as e:
+        return {
+            &quot;success&quot;: False,
+            &quot;error&quot;: &quot;Unexpected error&quot;,
+            &quot;reason&quot;: str(e)
+        }
+
+# Usage
+result = safe_submit_task(
+    worker_id=&quot;recruitment_v1&quot;,
+    title=&quot;Test&quot;,
+    objective=&quot;Test objective&quot;,
+    external_user_id=&quot;test-user&quot;
+)
+
+if result[&quot;success&quot;]:
+    print(f&quot;✓ Task submitted: {result['data']['task_id']}&quot;)
+else:
+    print(f&quot;✗ Error: {result['error']}&quot;)
+    print(f&quot;  {result['reason']}&quot;)
+</code></pre>
+<hr />
+<h2 id="example-10-logging-monitoring">Example 10: Logging &amp; Monitoring</h2>
+<pre><code class="language-python">import logging
+from datetime import datetime
+
+# Setup logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+def evaluate_with_logging(
+    candidate_name: str,
+    external_user_id: str
+) -&gt; Dict[str, Any]:
+    &quot;&quot;&quot;Evaluate candidate with detailed logging&quot;&quot;&quot;
+
+    logger.info(f&quot;Starting evaluation for {candidate_name}&quot;)
+
+    try:
+        # Submit
+        logger.info(f&quot;Submitting task for {candidate_name}&quot;)
+        task = submit_task(
+            worker_id=&quot;recruitment_v1&quot;,
+            title=f&quot;Screen {candidate_name}&quot;,
+            objective=&quot;Evaluate fit&quot;,
+            external_user_id=external_user_id
+        )
+        task_id = task[&quot;task_id&quot;]
+        logger.info(f&quot;Task submitted: {task_id}&quot;)
+
+        # Poll
+        logger.info(f&quot;Polling task {task_id}&quot;)
+        start_time = datetime.now()
+        final_task = poll_task_status(&quot;recruitment_v1&quot;, task_id)
+        elapsed = (datetime.now() - start_time).total_seconds()
+
+        logger.info(f&quot;Task {task_id} completed in {elapsed:.1f}s&quot;)
+        logger.info(f&quot;Final status: {final_task['status']}&quot;)
+
+        if final_task['status'] == 'done':
+            result = final_task['result']
+            logger.info(f&quot;Score: {result.get('overall_score')}/100, Decision: {result.get('decision')}&quot;)
+
+        return final_task
+
+    except Exception as e:
+        logger.error(f&quot;Evaluation failed: {str(e)}&quot;, exc_info=True)
+        raise
+
+# Usage
+try:
+    result = evaluate_with_logging(
+        candidate_name=&quot;Alice Johnson&quot;,
+        external_user_id=&quot;ceonova-user-456&quot;
+    )
+except Exception as e:
+    logger.error(f&quot;Fatal error: {e}&quot;)
+</code></pre>
+<hr />
+<h2 id="tips-best-practices">Tips &amp; Best Practices</h2>
+<h3 id="use-environment-variables">Use Environment Variables</h3>
+<pre><code class="language-python">from dotenv import load_dotenv
+import os
+
+load_dotenv()  # Load .env file
+email = os.getenv(&quot;CEONOVA_EMAIL&quot;)
+password = os.getenv(&quot;CEONOVA_PASSWORD&quot;)
+</code></pre>
+<h3 id="implement-retry-logic">Implement Retry Logic</h3>
+<pre><code class="language-python">from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
+
+session = requests.Session()
+retry = Retry(total=3, backoff_factor=0.5)
+adapter = HTTPAdapter(max_retries=retry)
+session.mount('http://', adapter)
+session.mount('https://', adapter)
+
+response = session.get(f&quot;{API_BASE}/api/v1/workers/&quot;, auth=AUTH)
+</code></pre>
+<h3 id="use-context-managers-for-resources">Use Context Managers for Resources</h3>
+<pre><code class="language-python">with requests.Session() as session:
+    response = session.get(f&quot;{API_BASE}/api/v1/workers/&quot;, auth=AUTH)
+    # Session automatically closed
+</code></pre>
+<h3 id="validate-responses">Validate Responses</h3>
+<pre><code class="language-python">def safe_json_parse(response):
+    try:
+        return response.json()
+    except ValueError:
+        raise ValueError(f&quot;Invalid JSON response: {response.text}&quot;)
+</code></pre>
+<hr />
+<h2 id="next-steps">Next Steps</h2>
+<p>→ <strong><a href="../03-javascript/">JavaScript Examples</a></strong> — Use Fetch API</p>
+<p>→ <strong><a href="../../02-workflows/">Workflows</a></strong> — Real-world patterns</p>
+<p>→ <strong><a href="../../../operations/01-troubleshooting/">Troubleshooting</a></strong> — Debug errors</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../01-curl/" class="btn btn-neutral float-left" title="cURL"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../03-javascript/" class="btn btn-neutral float-right" title="JavaScript">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../01-curl/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../03-javascript/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../../..";</script>
+    <script src="../../../js/theme_extra.js"></script>
+    <script src="../../../js/theme.js"></script>
+      <script src="../../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Troubleshooting & Operations - AgentsMarket Integration Documentation</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Troubleshooting \u0026 Operations";
+        var mkdocs_page_input_path = "operations\\01-troubleshooting.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> AgentsMarket Integration Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../getting-started/01-introduction/">Introduction</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../getting-started/02-authentication/">Authentication</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">API Guide</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../api-guide/01-api-overview/">Overview</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Integration Patterns</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" >Code Examples</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../integration-patterns/code-examples/01-curl/">cURL</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../integration-patterns/code-examples/02-python/">Python</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../integration-patterns/code-examples/03-javascript/">JavaScript</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../integration-patterns/02-workflows/">Workflows</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../integration-patterns/03-async-patterns/">Async Patterns & Webhooks</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Operations</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Troubleshooting & Operations</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#common-errors-solutions">Common Errors &amp; Solutions</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#401-unauthorized">401 Unauthorized</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#404-not-found">404 Not Found</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#422-unprocessable-entity">422 Unprocessable Entity</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#429-too-many-requests">429 Too Many Requests</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#500-internal-server-error">500 Internal Server Error</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#performance-optimization">Performance Optimization</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#1-reduce-polling-frequency">1. Reduce Polling Frequency</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#2-parallel-submission">2. Parallel Submission</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#3-batch-polling">3. Batch Polling</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#monitoring-alerting">Monitoring &amp; Alerting</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#1-task-success-rate">1. Task Success Rate</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#2-average-task-duration">2. Average Task Duration</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#3-rate-limit-monitoring">3. Rate Limit Monitoring</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#logging-best-practices">Logging Best Practices</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#1-structured-logging">1. Structured Logging</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#2-mask-sensitive-data">2. Mask Sensitive Data</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#3-request-tracing">3. Request Tracing</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#debugging-checklist">Debugging Checklist</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#support-escalation">Support &amp; Escalation</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Architecture</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../architecture/01-system-overview/">System Overview</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Reference</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../reference/glossary/">Glossary</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../reference/openapi.yaml">OpenAPI Specification</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">AgentsMarket Integration Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Operations</li>
+      <li class="breadcrumb-item active">Troubleshooting & Operations</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="troubleshooting-operations">Troubleshooting &amp; Operations</h1>
+<p><strong>Debug errors, optimize performance, monitor production</strong></p>
+<hr />
+<h2 id="common-errors-solutions">Common Errors &amp; Solutions</h2>
+<h3 id="401-unauthorized">401 Unauthorized</h3>
+<p><strong>Symptom:</strong></p>
+<pre><code>GET /api/v1/workers/
+&lt; 401 Unauthorized
+&lt; {&quot;detail&quot;: &quot;Invalid credentials&quot;}
+</code></pre>
+<p><strong>Possible Causes &amp; Fixes:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Wrong email</td>
+<td>Double-check spelling (case-sensitive)</td>
+</tr>
+<tr>
+<td>Wrong password</td>
+<td>Reset password if forgotten</td>
+</tr>
+<tr>
+<td>Basic Auth encoding error</td>
+<td>Verify: <code>echo -n "email:password" \| base64</code></td>
+</tr>
+<tr>
+<td>Bearer token expired</td>
+<td>Get new token: <code>POST /api/v1/auth/token</code></td>
+</tr>
+<tr>
+<td>Missing auth header</td>
+<td>Always include <code>Authorization: Bearer &lt;token&gt;</code> or <code>-u email:password</code></td>
+</tr>
+<tr>
+<td>HTTP instead of HTTPS</td>
+<td>Use HTTPS in production</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Debug Command:</strong></p>
+<pre><code class="language-bash">curl -v -u &quot;ceonova@agentsmarket.com:password&quot; \
+  http://localhost:8000/api/v1/workers/
+
+# Look for:
+# &gt; Authorization: Basic &lt;base64&gt;
+# &lt; 200 OK (success) or 401 Unauthorized (bad creds)
+</code></pre>
+<p><strong>Python Debug:</strong></p>
+<pre><code class="language-python">import requests
+response = requests.get(
+    &quot;http://localhost:8000/api/v1/workers/&quot;,
+    auth=(&quot;email@example.com&quot;, &quot;password&quot;)
+)
+print(f&quot;Status: {response.status_code}&quot;)
+print(f&quot;Response: {response.text}&quot;)
+</code></pre>
+<hr />
+<h3 id="404-not-found">404 Not Found</h3>
+<p><strong>Symptom:</strong></p>
+<pre><code>POST /api/v1/workers/unknown_worker/tasks
+&lt; 404 Not Found
+&lt; {&quot;detail&quot;: &quot;Worker not found&quot;}
+</code></pre>
+<p><strong>Possible Causes &amp; Fixes:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Worker ID typo</td>
+<td>List workers: <code>GET /api/v1/workers/</code></td>
+</tr>
+<tr>
+<td>Worker archived/offline</td>
+<td>Check worker status in response</td>
+</tr>
+<tr>
+<td>Stale worker list</td>
+<td>Refresh (endpoint is live, no caching)</td>
+</tr>
+<tr>
+<td>Using wrong API version</td>
+<td>Verify using <code>/api/v1/workers/</code> (v1 is correct)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Fix:</strong></p>
+<pre><code class="language-bash"># List all workers to find correct ID
+curl -u &quot;email:password&quot; http://localhost:8000/api/v1/workers/ | jq '.workers[].worker_id'
+
+# Copy exact worker_id from output
+</code></pre>
+<hr />
+<h3 id="422-unprocessable-entity">422 Unprocessable Entity</h3>
+<p><strong>Symptom:</strong></p>
+<pre><code>POST /api/v1/workers/recruitment_v1/tasks
+&lt; 422 Unprocessable Entity
+&lt; {&quot;detail&quot;: &quot;Value error, external_user_id is required&quot;}
+</code></pre>
+<p><strong>Possible Causes &amp; Fixes:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Missing required field</td>
+<td>Check: <code>title</code>, <code>objective</code>, <code>external_user_id</code> present</td>
+</tr>
+<tr>
+<td>Wrong field type</td>
+<td><code>external_user_id</code> must be string (not number)</td>
+</tr>
+<tr>
+<td>Invalid JSON</td>
+<td>Verify JSON syntax (no trailing commas, valid quotes)</td>
+</tr>
+<tr>
+<td>Extra/unknown fields</td>
+<td>Remove fields not in schema</td>
+</tr>
+<tr>
+<td>Empty string value</td>
+<td>Fields can't be empty <code>""</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Debug Command:</strong></p>
+<pre><code class="language-bash"># Validate JSON syntax
+cat &lt;&lt; 'EOF' | python -m json.tool
+{
+  &quot;title&quot;: &quot;Test&quot;,
+  &quot;objective&quot;: &quot;Test&quot;,
+  &quot;external_user_id&quot;: &quot;user-123&quot;
+}
+EOF
+
+# If valid JSON, error must be missing/wrong field
+</code></pre>
+<p><strong>Python Debug:</strong></p>
+<pre><code class="language-python">import json
+
+payload = {
+    &quot;title&quot;: &quot;Screen Alice&quot;,
+    &quot;objective&quot;: &quot;Evaluate fit&quot;,
+    &quot;external_user_id&quot;: &quot;user-456&quot;
+    # Missing context, expected_output - but they're optional
+}
+
+# Validate
+print(json.dumps(payload, indent=2))
+
+# Try submission
+response = requests.post(
+    &quot;http://localhost:8000/api/v1/workers/recruitment_v1/tasks&quot;,
+    json=payload,
+    auth=AUTH
+)
+print(f&quot;Status: {response.status_code}&quot;)
+if response.status_code != 202:
+    print(f&quot;Error: {response.json()['detail']}&quot;)
+</code></pre>
+<hr />
+<h3 id="429-too-many-requests">429 Too Many Requests</h3>
+<p><strong>Symptom:</strong></p>
+<pre><code>POST /api/v1/workers/recruitment_v1/tasks
+&lt; 429 Too Many Requests
+&lt; {&quot;detail&quot;: &quot;Rate limit exceeded&quot;}
+</code></pre>
+<p><strong>Rate Limits:</strong>
+- <code>POST /api/v1/workers/{worker_id}/tasks</code>: <strong>20 requests/minute</strong> per IP
+- <code>GET /api/v1/workers/</code>: Not rate-limited
+- <code>GET /api/v1/workers/{worker_id}/tasks</code>: Not rate-limited
+- <code>GET /api/v1/workers/{worker_id}/tasks/{task_id}</code>: Not rate-limited</p>
+<p><strong>Solution: Implement Exponential Backoff</strong></p>
+<pre><code class="language-python">import time
+
+def submit_with_retry(task_data, max_retries=3):
+    for attempt in range(max_retries):
+        response = requests.post(
+            &quot;http://localhost:8000/api/v1/workers/recruitment_v1/tasks&quot;,
+            json=task_data,
+            auth=AUTH
+        )
+
+        if response.status_code == 202:
+            return response.json()
+
+        if response.status_code == 429:
+            wait_time = (2 ** attempt) * 1  # 1s, 2s, 4s
+            print(f&quot;Rate limited. Waiting {wait_time}s...&quot;)
+            time.sleep(wait_time)
+            continue
+
+        # Other error
+        raise Exception(f&quot;{response.status_code}: {response.text}&quot;)
+
+    raise Exception(&quot;Max retries exceeded&quot;)
+</code></pre>
+<p><strong>Prevention:</strong>
+- Batch submissions with delays
+- Spread submissions over time
+- Use multi-threading to parallelize (respects per-IP limit)</p>
+<hr />
+<h3 id="500-internal-server-error">500 Internal Server Error</h3>
+<p><strong>Symptom:</strong></p>
+<pre><code>GET /api/v1/workers/
+&lt; 500 Internal Server Error
+&lt; {&quot;detail&quot;: &quot;Internal server error&quot;}
+</code></pre>
+<p><strong>Possible Causes:</strong>
+- AgentsMarket service crashed
+- Database connection error
+- Worker process error
+- Memory/resource exhaustion</p>
+<p><strong>Fixes:</strong>
+1. Wait 1-2 minutes and retry
+2. Check AgentsMarket status page
+3. Contact support if persists</p>
+<pre><code class="language-bash"># Retry with exponential backoff
+for i in {1..3}; do
+    curl -u &quot;email:password&quot; http://localhost:8000/api/v1/workers/ &amp;&amp; break
+    sleep $((2 ** i))
+done
+</code></pre>
+<hr />
+<h2 id="performance-optimization">Performance Optimization</h2>
+<h3 id="1-reduce-polling-frequency">1. Reduce Polling Frequency</h3>
+<p><strong>Bad:</strong> Poll every request</p>
+<pre><code class="language-python"># ❌ Wastes network
+for _ in range(100):
+    task = poll_task(task_id)
+</code></pre>
+<p><strong>Good:</strong> Poll with backoff</p>
+<pre><code class="language-python"># ✅ Efficient
+delay = 2
+for _ in range(max_retries):
+    task = poll_task(task_id)
+    if task[&quot;status&quot;] in [&quot;done&quot;, &quot;failed&quot;]:
+        break
+    time.sleep(delay)
+    delay = min(delay * 2, 30)
+</code></pre>
+<h3 id="2-parallel-submission">2. Parallel Submission</h3>
+<p><strong>Bad:</strong> Submit one-by-one</p>
+<pre><code class="language-python"># ❌ Slow: 50 tasks × 0.1s = 5 seconds
+for candidate in candidates:
+    submit_task(...)
+    time.sleep(0.1)
+</code></pre>
+<p><strong>Good:</strong> Submit in parallel</p>
+<pre><code class="language-python"># ✅ Fast: 50 tasks / 10 threads = ~2.5 seconds
+with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+    results = executor.map(submit_task, candidates)
+</code></pre>
+<h3 id="3-batch-polling">3. Batch Polling</h3>
+<p><strong>Bad:</strong> Poll each task separately</p>
+<pre><code class="language-python"># ❌ N tasks × M polls = N*M requests
+for task_id in task_ids:
+    status = poll_task(task_id)
+</code></pre>
+<p><strong>Good:</strong> Check completed, only poll pending</p>
+<pre><code class="language-python"># ✅ Only polls still-running tasks
+completed = set()
+while len(completed) &lt; len(task_ids):
+    for task_id in task_ids:
+        if task_id not in completed:
+            task = poll_task(task_id)
+            if task[&quot;status&quot;] in [&quot;done&quot;, &quot;failed&quot;]:
+                completed.add(task_id)
+    time.sleep(2)
+</code></pre>
+<hr />
+<h2 id="monitoring-alerting">Monitoring &amp; Alerting</h2>
+<h3 id="1-task-success-rate">1. Task Success Rate</h3>
+<p>Monitor percentage of tasks completing successfully:</p>
+<pre><code class="language-python">def get_success_rate(external_user_id, time_window_hours=24):
+    tasks = list_user_tasks(external_user_id)
+
+    recent = [t for t in tasks if is_recent(t, time_window_hours)]
+
+    completed = sum(1 for t in recent if t[&quot;status&quot;] == &quot;done&quot;)
+    failed = sum(1 for t in recent if t[&quot;status&quot;] == &quot;failed&quot;)
+
+    success_rate = completed / (completed + failed) if (completed + failed) &gt; 0 else 0
+
+    if success_rate &lt; 0.95:  # Alert if &lt; 95%
+        alert(f&quot;Low success rate: {success_rate*100:.1f}%&quot;)
+
+    return success_rate
+</code></pre>
+<h3 id="2-average-task-duration">2. Average Task Duration</h3>
+<p>Track how long tasks take:</p>
+<pre><code class="language-python">def get_avg_duration(worker_id, external_user_id):
+    tasks = list_user_tasks(worker_id, external_user_id)
+
+    durations = []
+    for task in tasks:
+        if task[&quot;status&quot;] == &quot;done&quot;:
+            created = datetime.fromisoformat(task[&quot;created_at&quot;])
+            # Polling returns created_at; get actual completion from polling
+            durations.append(get_task_age(task))
+
+    if not durations:
+        return None
+
+    avg = sum(durations) / len(durations)
+
+    if avg &gt; 600:  # Alert if &gt; 10 min
+        alert(f&quot;Slow task execution: {avg}s average&quot;)
+
+    return avg
+</code></pre>
+<h3 id="3-rate-limit-monitoring">3. Rate Limit Monitoring</h3>
+<p>Track rate limit hits:</p>
+<pre><code class="language-python">rate_limit_hits = 0
+
+def submit_task_with_monitoring(task_data):
+    global rate_limit_hits
+
+    response = requests.post(...)
+
+    if response.status_code == 429:
+        rate_limit_hits += 1
+        if rate_limit_hits &gt; 5:  # Alert if &gt; 5 in time window
+            alert(f&quot;Frequent rate limiting: {rate_limit_hits} hits&quot;)
+        return None
+
+    return response.json()
+</code></pre>
+<hr />
+<h2 id="logging-best-practices">Logging Best Practices</h2>
+<h3 id="1-structured-logging">1. Structured Logging</h3>
+<pre><code class="language-python">import logging
+import json
+
+class JSONFormatter(logging.Formatter):
+    def format(self, record):
+        return json.dumps({
+            &quot;timestamp&quot;: record.created,
+            &quot;level&quot;: record.levelname,
+            &quot;message&quot;: record.getMessage(),
+            &quot;task_id&quot;: getattr(record, &quot;task_id&quot;, None)
+        })
+
+logger = logging.getLogger(__name__)
+handler = logging.StreamHandler()
+handler.setFormatter(JSONFormatter())
+logger.addHandler(handler)
+
+# Usage
+logger.info(&quot;Task submitted&quot;, extra={&quot;task_id&quot;: task_id})
+</code></pre>
+<h3 id="2-mask-sensitive-data">2. Mask Sensitive Data</h3>
+<pre><code class="language-python">def log_request(method, url, auth=None):
+    log_auth = None
+    if auth:
+        email, _ = auth  # Redact password
+        log_auth = f&quot;{email}:***&quot;
+
+    logger.debug(f&quot;{method} {url} (auth: {log_auth})&quot;)
+</code></pre>
+<h3 id="3-request-tracing">3. Request Tracing</h3>
+<pre><code class="language-python">import uuid
+
+trace_id = str(uuid.uuid4())
+
+def log_with_trace(message):
+    logger.info(message, extra={&quot;trace_id&quot;: trace_id})
+
+# Usage
+log_with_trace(f&quot;Submitting task {task_id}&quot;)  # Includes trace_id
+</code></pre>
+<hr />
+<h2 id="debugging-checklist">Debugging Checklist</h2>
+<p>When integration fails:</p>
+<ul>
+<li>[ ] Check credentials (email, password, format)</li>
+<li>[ ] Verify HTTPS in production</li>
+<li>[ ] List workers: <code>GET /api/v1/workers/</code></li>
+<li>[ ] Verify worker_id exists</li>
+<li>[ ] Validate request JSON (syntax, required fields)</li>
+<li>[ ] Check rate limits (wait if needed)</li>
+<li>[ ] Review logs for 401/404/422 errors</li>
+<li>[ ] Test with cURL before Python/JS</li>
+<li>[ ] Monitor task status via polling</li>
+<li>[ ] Check AgentsMarket status page</li>
+</ul>
+<hr />
+<h2 id="support-escalation">Support &amp; Escalation</h2>
+<p><strong>Before contacting support:</strong>
+1. Review troubleshooting guide (above)
+2. Check <a href="../../integration-patterns/code-examples/01-curl/">Code Examples</a>
+3. Verify credentials &amp; permissions
+4. Test with cURL to isolate issue</p>
+<p><strong>When contacting support:</strong>
+- Include error message &amp; HTTP status code
+- Provide request body (redact credentials)
+- Share task ID for investigation
+- Include logs with trace IDs</p>
+<hr />
+<h2 id="next-steps">Next Steps</h2>
+<p>→ <strong><a href="../../integration-patterns/code-examples/01-curl/">Code Examples</a></strong> — Working samples</p>
+<p>→ <strong><a href="../../integration-patterns/03-async-patterns/">Async Patterns</a></strong> — Polling &amp; retries</p>
+<p>→ <strong><a href="../../integration-patterns/02-workflows/">Workflows</a></strong> — Real-world use cases</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../../integration-patterns/03-async-patterns/" class="btn btn-neutral float-left" title="Async Patterns & Webhooks"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../architecture/01-system-overview/" class="btn btn-neutral float-right" title="System Overview">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../../integration-patterns/03-async-patterns/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../../architecture/01-system-overview/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

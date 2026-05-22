@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../../img/favicon.ico" />
+    <title>JavaScript - AgentsMarket Integration Documentation</title>
+    <link rel="stylesheet" href="../../../css/theme.css" />
+    <link rel="stylesheet" href="../../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "JavaScript";
+        var mkdocs_page_input_path = "integration-patterns\\code-examples\\03-javascript.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../../.." class="icon icon-home"> AgentsMarket Integration Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../getting-started/01-introduction/">Introduction</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../getting-started/02-authentication/">Authentication</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">API Guide</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../api-guide/01-api-overview/">Overview</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Integration Patterns</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" >Code Examples</a>
+    <ul class="current">
+                <li class="toctree-l2"><a class="reference internal" href="../01-curl/">cURL</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../02-python/">Python</a>
+                </li>
+                <li class="toctree-l2 current"><a class="reference internal current" href="#">JavaScript</a>
+    <ul class="current">
+    <li class="toctree-l3"><a class="reference internal" href="#setup">Setup</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#configuration">Configuration</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#environment-setup-nodejs">Environment Setup (Node.js)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-1-discover-workers">Example 1: Discover Workers</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-2-submit-a-task">Example 2: Submit a Task</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-3-list-users-tasks">Example 3: List User's Tasks</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-4-poll-task-status-single-poll">Example 4: Poll Task Status (Single Poll)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-5-poll-with-exponential-backoff">Example 5: Poll with Exponential Backoff</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-6-end-to-end-workflow">Example 6: End-to-End Workflow</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-7-batch-evaluation-promiseall">Example 7: Batch Evaluation (Promise.all)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-8-error-handling">Example 8: Error Handling</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-9-asyncawait-with-try-catch">Example 9: Async/Await with Try-Catch</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-10-class-based-client">Example 10: Class-Based Client</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#tips-best-practices">Tips &amp; Best Practices</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#handle-network-timeouts">Handle Network Timeouts</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#retry-failed-requests">Retry Failed Requests</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#log-requestsresponses">Log Requests/Responses</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#next-steps">Next Steps</a>
+    </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../02-workflows/">Workflows</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../03-async-patterns/">Async Patterns & Webhooks</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Operations</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../operations/01-troubleshooting/">Troubleshooting & Operations</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Architecture</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../architecture/01-system-overview/">System Overview</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Reference</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../reference/glossary/">Glossary</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../reference/openapi.yaml">OpenAPI Specification</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../..">AgentsMarket Integration Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Integration Patterns</li>
+          <li class="breadcrumb-item">Code Examples</li>
+      <li class="breadcrumb-item active">JavaScript</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="javascript-examples">JavaScript Examples</h1>
+<p><strong>Ready-to-use JavaScript samples using Fetch API</strong></p>
+<hr />
+<h2 id="setup">Setup</h2>
+<h3 id="configuration">Configuration</h3>
+<p>Create <code>agentsmarket.js</code>:</p>
+<pre><code class="language-javascript">const API_BASE = process.env.AGENTSMARKET_API || &quot;http://localhost:8000&quot;;
+const AUTH_EMAIL = process.env.CEONOVA_EMAIL || &quot;ceonova@agentsmarket.com&quot;;
+const AUTH_PASSWORD = process.env.CEONOVA_PASSWORD || &quot;your-password&quot;;
+
+// Helper: Generate Basic Auth header
+function getBasicAuthHeader(email, password) {
+  const credentials = `${email}:${password}`;
+  const encoded = btoa(credentials);
+  return {
+    &quot;Authorization&quot;: `Basic ${encoded}`,
+    &quot;Content-Type&quot;: &quot;application/json&quot;
+  };
+}
+
+const authHeaders = getBasicAuthHeader(AUTH_EMAIL, AUTH_PASSWORD);
+</code></pre>
+<h3 id="environment-setup-nodejs">Environment Setup (Node.js)</h3>
+<p>Create <code>.env</code>:</p>
+<pre><code class="language-env">AGENTSMARKET_API=http://localhost:8000
+CEONOVA_EMAIL=ceonova@agentsmarket.com
+CEONOVA_PASSWORD=your-password
+</code></pre>
+<p>Load with:</p>
+<pre><code class="language-bash">npm install dotenv
+</code></pre>
+<pre><code class="language-javascript">require('dotenv').config();
+const API_BASE = process.env.AGENTSMARKET_API;
+</code></pre>
+<hr />
+<h2 id="example-1-discover-workers">Example 1: Discover Workers</h2>
+<pre><code class="language-javascript">async function discoverWorkers() {
+  const response = await fetch(`${API_BASE}/api/v1/workers/`, {
+    headers: authHeaders
+  });
+
+  if (!response.ok) {
+    throw new Error(`Error: ${response.status} - ${response.statusText}`);
+  }
+
+  const data = await response.json();
+  data.workers.forEach(worker =&gt; {
+    console.log(`✓ ${worker.worker_id}: ${worker.name}`);
+    console.log(`  Capabilities: ${worker.capabilities.join(&quot;, &quot;)}`);
+  });
+
+  return data;
+}
+
+// Usage
+try {
+  await discoverWorkers();
+} catch (error) {
+  console.error(&quot;Failed to discover workers:&quot;, error);
+}
+</code></pre>
+<hr />
+<h2 id="example-2-submit-a-task">Example 2: Submit a Task</h2>
+<pre><code class="language-javascript">async function submitTask(
+  workerId,
+  title,
+  objective,
+  externalUserId,
+  context = null,
+  expectedOutput = null
+) {
+  const payload = {
+    title,
+    objective,
+    external_user_id: externalUserId
+  };
+
+  if (context) payload.context = context;
+  if (expectedOutput) payload.expected_output = expectedOutput;
+
+  const response = await fetch(
+    `${API_BASE}/api/v1/workers/${workerId}/tasks`,
+    {
+      method: &quot;POST&quot;,
+      headers: authHeaders,
+      body: JSON.stringify(payload)
+    }
+  );
+
+  if (response.status !== 202) {
+    const error = await response.text();
+    throw new Error(`Submit failed (${response.status}): ${error}`);
+  }
+
+  return await response.json();
+}
+
+// Usage
+try {
+  const task = await submitTask(
+    &quot;recruitment_v1&quot;,
+    &quot;Screen Alice Johnson&quot;,
+    &quot;Evaluate candidate fit&quot;,
+    &quot;ceonova-user-456&quot;,
+    &quot;Senior Engineer role, 5+ years required&quot;
+  );
+
+  console.log(`✓ Task submitted!`);
+  console.log(`  Task ID: ${task.task_id}`);
+  console.log(`  Worker: ${task.worker_id}`);
+} catch (error) {
+  console.error(&quot;Task submission failed:&quot;, error);
+}
+</code></pre>
+<hr />
+<h2 id="example-3-list-users-tasks">Example 3: List User's Tasks</h2>
+<pre><code class="language-javascript">async function listUserTasks(
+  workerId,
+  externalUserId,
+  limit = 20,
+  offset = 0
+) {
+  const params = new URLSearchParams({
+    external_user_id: externalUserId,
+    limit,
+    offset
+  });
+
+  const response = await fetch(
+    `${API_BASE}/api/v1/workers/${workerId}/tasks?${params}`,
+    { headers: authHeaders }
+  );
+
+  if (!response.ok) {
+    throw new Error(`Error: ${response.status}`);
+  }
+
+  return await response.json();
+}
+
+// Usage
+const tasks = await listUserTasks(&quot;recruitment_v1&quot;, &quot;ceonova-user-456&quot;);
+console.log(`Total tasks: ${tasks.total}`);
+tasks.items.forEach(task =&gt; {
+  console.log(`  • ${task.task_id}: ${task.status}`);
+});
+</code></pre>
+<hr />
+<h2 id="example-4-poll-task-status-single-poll">Example 4: Poll Task Status (Single Poll)</h2>
+<pre><code class="language-javascript">async function pollTaskOnce(
+  workerId,
+  taskId,
+  externalUserId = null
+) {
+  let url = `${API_BASE}/api/v1/workers/${workerId}/tasks/${taskId}`;
+
+  if (externalUserId) {
+    url += `?external_user_id=${externalUserId}`;
+  }
+
+  const response = await fetch(url, { headers: authHeaders });
+
+  if (!response.ok) {
+    throw new Error(`Error: ${response.status}`);
+  }
+
+  return await response.json();
+}
+
+// Usage
+const task = await pollTaskOnce(&quot;recruitment_v1&quot;, &quot;550e8400-e29b-41d4-a716-446655440000&quot;);
+console.log(`Status: ${task.status}`);
+if (task.status === 'done') {
+  console.log(`Result:`, task.result);
+}
+</code></pre>
+<hr />
+<h2 id="example-5-poll-with-exponential-backoff">Example 5: Poll with Exponential Backoff</h2>
+<pre><code class="language-javascript">async function pollTaskStatus(
+  workerId,
+  taskId,
+  maxRetries = 30,
+  initialDelay = 2000
+) {
+  let delay = initialDelay;
+
+  for (let attempt = 1; attempt &lt;= maxRetries; attempt++) {
+    console.log(`[Attempt ${attempt}/${maxRetries}] Polling task...`);
+
+    try {
+      const task = await pollTaskOnce(workerId, taskId);
+      console.log(`  Status: ${task.status}`);
+
+      // Task complete
+      if ([&quot;done&quot;, &quot;failed&quot;].includes(task.status)) {
+        return task;
+      }
+
+      // Still running, wait and retry
+      if (attempt &lt; maxRetries) {
+        console.log(`  Waiting ${delay}ms before retry...`);
+        await new Promise(resolve =&gt; setTimeout(resolve, delay));
+        delay = Math.min(delay * 2, 30000); // Exponential backoff, cap at 30s
+      }
+    } catch (error) {
+      console.error(`  Error: ${error.message}`);
+      if (attempt === maxRetries) throw error;
+      await new Promise(resolve =&gt; setTimeout(resolve, delay));
+    }
+  }
+
+  throw new Error(`Task polling timeout after ${maxRetries} attempts`);
+}
+
+// Usage
+const task = await pollTaskStatus(&quot;recruitment_v1&quot;, &quot;550e8400-e29b-41d4-a716-446655440000&quot;);
+console.log(`\n✓ Task complete!`);
+console.log(`  Final status: ${task.status}`);
+if (task.status === 'done') {
+  console.log(`  Result:`, task.result);
+}
+</code></pre>
+<hr />
+<h2 id="example-6-end-to-end-workflow">Example 6: End-to-End Workflow</h2>
+<pre><code class="language-javascript">async function evaluateCandidate(
+  candidateName,
+  candidateInfo,
+  jobDescription,
+  externalUserId
+) {
+  console.log(`Evaluating ${candidateName}...`);
+  console.log(&quot;=&quot;.repeat(50));
+
+  // Step 1: Submit task
+  console.log(`\n1. Submitting task...`);
+  const task = await submitTask(
+    &quot;recruitment_v1&quot;,
+    `Screen ${candidateName}`,
+    &quot;Evaluate candidate fit&quot;,
+    externalUserId,
+    `Job: ${jobDescription}\n\nCandidate: ${candidateInfo}`,
+    &quot;Score (0-100) and recommendation (PASS/MAYBE/REJECT)&quot;
+  );
+
+  console.log(`   ✓ Task ID: ${task.task_id}`);
+
+  // Step 2: Poll for result
+  console.log(`\n2. Waiting for result...`);
+  const finalTask = await pollTaskStatus(&quot;recruitment_v1&quot;, task.task_id);
+
+  // Step 3: Process result
+  console.log(`\n3. Result:`);
+  console.log(`   Status: ${finalTask.status}`);
+
+  if (finalTask.status === 'done') {
+    const result = finalTask.result;
+    console.log(`   Score: ${result.overall_score}/100`);
+    console.log(`   Decision: ${result.decision}`);
+    console.log(`   Reasoning: ${result.reasoning}`);
+  } else if (finalTask.status === 'failed') {
+    console.log(`   Error: ${finalTask.result.error}`);
+  }
+
+  console.log(&quot;=&quot;.repeat(50));
+  return finalTask;
+}
+
+// Usage
+try {
+  const result = await evaluateCandidate(
+    &quot;Alice Johnson&quot;,
+    &quot;7 years Python, 3 years Docker, 2 years Kubernetes&quot;,
+    &quot;Senior Backend Engineer - 5+ years required&quot;,
+    &quot;ceonova-user-456&quot;
+  );
+} catch (error) {
+  console.error(&quot;Evaluation failed:&quot;, error);
+}
+</code></pre>
+<hr />
+<h2 id="example-7-batch-evaluation-promiseall">Example 7: Batch Evaluation (Promise.all)</h2>
+<pre><code class="language-javascript">async function evaluateCandidatesParallel(
+  candidates,
+  jobDescription,
+  externalUserId
+) {
+  console.log(`Evaluating ${candidates.length} candidates in parallel...`);
+  console.log(&quot;=&quot;.repeat(50));
+
+  // Step 1: Submit all tasks
+  console.log(`\n1. Submitting ${candidates.length} tasks...`);
+  const submitPromises = candidates.map(candidate =&gt;
+    submitTask(
+      &quot;recruitment_v1&quot;,
+      `Screen ${candidate.name}`,
+      &quot;Evaluate fit&quot;,
+      externalUserId,
+      `Job: ${jobDescription}\n\nCandidate: ${candidate.info}`
+    ).then(task =&gt; ({
+      candidate: candidate.name,
+      taskId: task.task_id
+    }))
+  );
+
+  const submitted = await Promise.all(submitPromises);
+  console.log(`   ✓ All ${submitted.length} tasks submitted!`);
+
+  // Step 2: Poll all tasks
+  console.log(`\n2. Polling results...`);
+  const pollPromises = submitted.map(({ candidate, taskId }) =&gt;
+    pollTaskStatus(&quot;recruitment_v1&quot;, taskId)
+      .then(task =&gt; ({
+        candidate,
+        taskId,
+        status: task.status,
+        result: task.result
+      }))
+      .catch(error =&gt; ({
+        candidate,
+        taskId,
+        status: &quot;error&quot;,
+        error: error.message
+      }))
+  );
+
+  const results = await Promise.all(pollPromises);
+
+  // Step 3: Display results
+  console.log(`\n${&quot;=&quot;.repeat(50)}`);
+  console.log(&quot;RESULTS:&quot;);
+  console.log(&quot;=&quot;.repeat(50));
+
+  results.forEach(result =&gt; {
+    if (result.status === 'done') {
+      const r = result.result;
+      console.log(`✓ ${result.candidate}: ${r.overall_score}/100 - ${r.decision}`);
+    } else if (result.status === 'error') {
+      console.log(`✗ ${result.candidate}: ERROR - ${result.error}`);
+    } else {
+      console.log(`? ${result.candidate}: ${result.status}`);
+    }
+  });
+
+  return results;
+}
+
+// Usage
+const candidates = [
+  { name: &quot;Alice Johnson&quot;, info: &quot;7 yrs Python, 3 yrs Docker&quot; },
+  { name: &quot;Bob Smith&quot;, info: &quot;5 yrs Python, 1 yr Kubernetes&quot; },
+  { name: &quot;Carol White&quot;, info: &quot;10 yrs backend, AWS expert&quot; }
+];
+
+try {
+  const results = await evaluateCandidatesParallel(
+    candidates,
+    &quot;Senior Backend Engineer - 5+ years Python required&quot;,
+    &quot;ceonova-team-1&quot;
+  );
+} catch (error) {
+  console.error(&quot;Batch evaluation failed:&quot;, error);
+}
+</code></pre>
+<hr />
+<h2 id="example-8-error-handling">Example 8: Error Handling</h2>
+<pre><code class="language-javascript">async function safeSubmitTask(
+  workerId,
+  title,
+  objective,
+  externalUserId
+) {
+  try {
+    return await submitTask(workerId, title, objective, externalUserId);
+  } catch (error) {
+    const message = error.message;
+
+    if (message.includes(&quot;401&quot;)) {
+      return {
+        success: false,
+        error: &quot;Authentication failed&quot;,
+        reason: &quot;Check credentials in .env&quot;
+      };
+    } else if (message.includes(&quot;404&quot;)) {
+      return {
+        success: false,
+        error: &quot;Worker not found&quot;,
+        reason: &quot;List workers and verify worker_id&quot;
+      };
+    } else if (message.includes(&quot;422&quot;)) {
+      return {
+        success: false,
+        error: &quot;Invalid request&quot;,
+        reason: &quot;Check request body matches schema&quot;
+      };
+    } else if (message.includes(&quot;429&quot;)) {
+      return {
+        success: false,
+        error: &quot;Rate limited&quot;,
+        reason: &quot;Wait 1 minute before retrying&quot;
+      };
+    } else {
+      return {
+        success: false,
+        error: &quot;Unexpected error&quot;,
+        reason: message
+      };
+    }
+  }
+}
+
+// Usage
+const result = await safeSubmitTask(
+  &quot;recruitment_v1&quot;,
+  &quot;Test&quot;,
+  &quot;Test&quot;,
+  &quot;test-user&quot;
+);
+
+if (result.success) {
+  console.log(`✓ Task submitted: ${result.task_id}`);
+} else {
+  console.error(`✗ ${result.error}: ${result.reason}`);
+}
+</code></pre>
+<hr />
+<h2 id="example-9-asyncawait-with-try-catch">Example 9: Async/Await with Try-Catch</h2>
+<pre><code class="language-javascript">async function runEvaluation() {
+  try {
+    // Step 1: Discover workers
+    console.log(&quot;Step 1: Discovering workers...&quot;);
+    const workers = await discoverWorkers();
+    const recruitmentWorker = workers.workers.find(
+      w =&gt; w.worker_id === &quot;recruitment_v1&quot;
+    );
+
+    if (!recruitmentWorker) {
+      throw new Error(&quot;recruitment_v1 worker not found&quot;);
+    }
+
+    // Step 2: Submit task
+    console.log(&quot;\nStep 2: Submitting task...&quot;);
+    const task = await submitTask(
+      &quot;recruitment_v1&quot;,
+      &quot;Screen candidate&quot;,
+      &quot;Evaluate fit&quot;,
+      &quot;ceonova-user-1&quot;
+    );
+
+    // Step 3: Poll result
+    console.log(&quot;\nStep 3: Waiting for result...&quot;);
+    const finalTask = await pollTaskStatus(&quot;recruitment_v1&quot;, task.task_id);
+
+    // Step 4: Display result
+    console.log(&quot;\nStep 4: Result:&quot;);
+    console.log(finalTask.result);
+
+    return finalTask;
+  } catch (error) {
+    console.error(&quot;Pipeline failed:&quot;, error.message);
+    throw error;
+  }
+}
+
+// Usage
+runEvaluation()
+  .then(() =&gt; console.log(&quot;\n✓ Pipeline completed&quot;))
+  .catch(error =&gt; console.error(&quot;\n✗ Pipeline failed:&quot;, error));
+</code></pre>
+<hr />
+<h2 id="example-10-class-based-client">Example 10: Class-Based Client</h2>
+<pre><code class="language-javascript">class AgentsMarketClient {
+  constructor(apiBase, email, password) {
+    this.apiBase = apiBase;
+    this.email = email;
+    this.password = password;
+    this.authHeaders = this.createAuthHeaders();
+  }
+
+  createAuthHeaders() {
+    const credentials = `${this.email}:${this.password}`;
+    const encoded = btoa(credentials);
+    return {
+      &quot;Authorization&quot;: `Basic ${encoded}`,
+      &quot;Content-Type&quot;: &quot;application/json&quot;
+    };
+  }
+
+  async discoverWorkers() {
+    const response = await fetch(`${this.apiBase}/api/v1/workers/`, {
+      headers: this.authHeaders
+    });
+    if (!response.ok) throw new Error(`Error: ${response.status}`);
+    return await response.json();
+  }
+
+  async submitTask(workerId, title, objective, externalUserId, context = null) {
+    const payload = {
+      title,
+      objective,
+      external_user_id: externalUserId
+    };
+    if (context) payload.context = context;
+
+    const response = await fetch(
+      `${this.apiBase}/api/v1/workers/${workerId}/tasks`,
+      {
+        method: &quot;POST&quot;,
+        headers: this.authHeaders,
+        body: JSON.stringify(payload)
+      }
+    );
+
+    if (response.status !== 202) throw new Error(`Submit failed: ${response.status}`);
+    return await response.json();
+  }
+
+  async pollTask(workerId, taskId) {
+    const response = await fetch(
+      `${this.apiBase}/api/v1/workers/${workerId}/tasks/${taskId}`,
+      { headers: this.authHeaders }
+    );
+    if (!response.ok) throw new Error(`Poll failed: ${response.status}`);
+    return await response.json();
+  }
+}
+
+// Usage
+const client = new AgentsMarketClient(
+  &quot;http://localhost:8000&quot;,
+  process.env.CEONOVA_EMAIL,
+  process.env.CEONOVA_PASSWORD
+);
+
+const workers = await client.discoverWorkers();
+console.log(`Available workers: ${workers.workers.length}`);
+
+const task = await client.submitTask(
+  &quot;recruitment_v1&quot;,
+  &quot;Test&quot;,
+  &quot;Test&quot;,
+  &quot;user-1&quot;
+);
+console.log(`Task submitted: ${task.task_id}`);
+</code></pre>
+<hr />
+<h2 id="tips-best-practices">Tips &amp; Best Practices</h2>
+<h3 id="handle-network-timeouts">Handle Network Timeouts</h3>
+<pre><code class="language-javascript">async function fetchWithTimeout(url, options = {}, timeout = 5000) {
+  const controller = new AbortController();
+  const id = setTimeout(() =&gt; controller.abort(), timeout);
+
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal
+    });
+    return response;
+  } finally {
+    clearTimeout(id);
+  }
+}
+</code></pre>
+<h3 id="retry-failed-requests">Retry Failed Requests</h3>
+<pre><code class="language-javascript">async function retryFetch(url, options = {}, maxRetries = 3) {
+  for (let i = 0; i &lt; maxRetries; i++) {
+    try {
+      return await fetch(url, options);
+    } catch (error) {
+      if (i === maxRetries - 1) throw error;
+      await new Promise(r =&gt; setTimeout(r, 1000 * (i + 1)));
+    }
+  }
+}
+</code></pre>
+<h3 id="log-requestsresponses">Log Requests/Responses</h3>
+<pre><code class="language-javascript">async function fetchWithLogging(url, options = {}) {
+  console.log(`→ ${options.method || 'GET'} ${url}`);
+  const response = await fetch(url, options);
+  console.log(`← ${response.status}`);
+  return response;
+}
+</code></pre>
+<hr />
+<h2 id="next-steps">Next Steps</h2>
+<p>→ <strong><a href="../01-curl/">cURL Examples</a></strong> — Command-line testing</p>
+<p>→ <strong><a href="../../02-workflows/">Workflows</a></strong> — Real-world patterns</p>
+<p>→ <strong><a href="../../../operations/01-troubleshooting/">Troubleshooting</a></strong> — Debug errors</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../02-python/" class="btn btn-neutral float-left" title="Python"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../02-workflows/" class="btn btn-neutral float-right" title="Workflows">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../02-python/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../../02-workflows/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../../..";</script>
+    <script src="../../../js/theme_extra.js"></script>
+    <script src="../../../js/theme.js"></script>
+      <script src="../../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

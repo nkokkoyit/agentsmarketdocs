@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Overview - AgentsMarket Integration Documentation</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Overview";
+        var mkdocs_page_input_path = "api-guide\\01-api-overview.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> AgentsMarket Integration Documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../getting-started/01-introduction/">Introduction</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../getting-started/02-authentication/">Authentication</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">API Guide</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Overview</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#quick-reference">Quick Reference</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#get-apiv1workers">GET /api/v1/workers/</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#description">Description</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#parameters">Parameters</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-request">Example Request</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-response-200-ok">Example Response (200 OK)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#use-cases">Use Cases</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#get-apiv1workersworker_id">GET /api/v1/workers/{worker_id}</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#description_1">Description</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#parameters_1">Parameters</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-request_1">Example Request</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-response-200-ok_1">Example Response (200 OK)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#use-cases_1">Use Cases</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#post-apiv1workersworker_idtasks">POST /api/v1/workers/{worker_id}/tasks</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#description_2">Description</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#parameters_2">Parameters</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-request_2">Example Request</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#response-202-accepted">Response (202 Accepted)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#response-codes">Response Codes</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#task-lifecycle">Task Lifecycle</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#use-cases_2">Use Cases</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#get-apiv1workersworker_idtasks">GET /api/v1/workers/{worker_id}/tasks</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#description_3">Description</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#parameters_3">Parameters</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-request_3">Example Request</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-response-200-ok_2">Example Response (200 OK)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#use-cases_3">Use Cases</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#get-apiv1workersworker_idtaskstask_id">GET /api/v1/workers/{worker_id}/tasks/{task_id}</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#description_4">Description</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#parameters_4">Parameters</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-request_4">Example Request</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#response-examples">Response Examples</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#task-status-values">Task Status Values</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#use-cases_4">Use Cases</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#error-handling">Error Handling</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#401-unauthorized">401 Unauthorized</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#404-not-found">404 Not Found</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#422-unprocessable-entity">422 Unprocessable Entity</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#429-too-many-requests">429 Too Many Requests</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#data-types-schemas">Data Types &amp; Schemas</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#workerinfo">WorkerInfo</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#workertasksubmitrequest">WorkerTaskSubmitRequest</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#workertaskstatusresponse">WorkerTaskStatusResponse</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#whats-next">What's Next?</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Integration Patterns</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" >Code Examples</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../integration-patterns/code-examples/01-curl/">cURL</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../integration-patterns/code-examples/02-python/">Python</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../integration-patterns/code-examples/03-javascript/">JavaScript</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../integration-patterns/02-workflows/">Workflows</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../integration-patterns/03-async-patterns/">Async Patterns & Webhooks</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Operations</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../operations/01-troubleshooting/">Troubleshooting & Operations</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Architecture</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../architecture/01-system-overview/">System Overview</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Reference</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../reference/glossary/">Glossary</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../reference/openapi.yaml">OpenAPI Specification</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">AgentsMarket Integration Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">API Guide</li>
+      <li class="breadcrumb-item active">Overview</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="api-overview">API Overview</h1>
+<p><strong>Complete reference for AgentsMarket workers REST API</strong></p>
+<hr />
+<h2 id="quick-reference">Quick Reference</h2>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/workers/</code></td>
+<td>List all workers</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/workers/{worker_id}</code></td>
+<td>Get worker details</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/v1/workers/{worker_id}/tasks</code></td>
+<td>Submit a task</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/workers/{worker_id}/tasks</code></td>
+<td>List user's tasks</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/workers/{worker_id}/tasks/{task_id}</code></td>
+<td>Poll task status &amp; result</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Base URL:</strong> <code>http://localhost:8000</code> (or your AgentsMarket instance)<br />
+<strong>Authentication:</strong> HTTP Basic Auth or JWT Bearer Token<br />
+<strong>Response Format:</strong> JSON</p>
+<hr />
+<h2 id="get-apiv1workers">GET /api/v1/workers/</h2>
+<h3 id="description">Description</h3>
+<p>List all available workers and their capabilities.</p>
+<h3 id="parameters">Parameters</h3>
+<p>None</p>
+<h3 id="example-request">Example Request</h3>
+<pre><code class="language-bash">curl -X GET http://localhost:8000/api/v1/workers/ \
+  -u &quot;ceonova@agentsmarket.com:password&quot;
+</code></pre>
+<h3 id="example-response-200-ok">Example Response (200 OK)</h3>
+<pre><code class="language-json">{
+  &quot;workers&quot;: [
+    {
+      &quot;worker_id&quot;: &quot;recruitment_v1&quot;,
+      &quot;name&quot;: &quot;Recruitment Screening&quot;,
+      &quot;description&quot;: &quot;Evaluate candidates against job criteria using CrewAI agents&quot;,
+      &quot;status&quot;: &quot;available&quot;,
+      &quot;capabilities&quot;: [
+        &quot;screening&quot;,
+        &quot;skill_matching&quot;,
+        &quot;scoring&quot;,
+        &quot;recommendation&quot;
+      ]
+    },
+    {
+      &quot;worker_id&quot;: &quot;marketing_strategy&quot;,
+      &quot;name&quot;: &quot;Marketing Strategy&quot;,
+      &quot;description&quot;: &quot;Create comprehensive marketing plans and content&quot;,
+      &quot;status&quot;: &quot;available&quot;,
+      &quot;capabilities&quot;: [
+        &quot;market_research&quot;,
+        &quot;competitive_analysis&quot;,
+        &quot;campaign_planning&quot;,
+        &quot;content_creation&quot;
+      ]
+    }
+  ]
+}
+</code></pre>
+<h3 id="use-cases">Use Cases</h3>
+<ul>
+<li>Discover available workers before integration</li>
+<li>Programmatically determine capabilities</li>
+<li>Verify worker availability</li>
+</ul>
+<hr />
+<h2 id="get-apiv1workersworker_id">GET /api/v1/workers/{worker_id}</h2>
+<h3 id="description_1">Description</h3>
+<p>Get detailed information about a specific worker.</p>
+<h3 id="parameters_1">Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Required</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>worker_id</td>
+<td>string (path)</td>
+<td>✅</td>
+<td><code>recruitment_v1</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="example-request_1">Example Request</h3>
+<pre><code class="language-bash">curl -X GET http://localhost:8000/api/v1/workers/recruitment_v1 \
+  -u &quot;ceonova@agentsmarket.com:password&quot;
+</code></pre>
+<h3 id="example-response-200-ok_1">Example Response (200 OK)</h3>
+<pre><code class="language-json">{
+  &quot;worker_id&quot;: &quot;recruitment_v1&quot;,
+  &quot;name&quot;: &quot;Recruitment Screening&quot;,
+  &quot;description&quot;: &quot;Evaluate candidates against job criteria using CrewAI agents&quot;,
+  &quot;status&quot;: &quot;available&quot;,
+  &quot;capabilities&quot;: [
+    &quot;screening&quot;,
+    &quot;skill_matching&quot;,
+    &quot;scoring&quot;,
+    &quot;recommendation&quot;
+  ]
+}
+</code></pre>
+<h3 id="use-cases_1">Use Cases</h3>
+<ul>
+<li>Verify worker exists and is available</li>
+<li>Display worker details in UI</li>
+<li>Confirm capabilities before submission</li>
+</ul>
+<hr />
+<h2 id="post-apiv1workersworker_idtasks">POST /api/v1/workers/{worker_id}/tasks</h2>
+<h3 id="description_2">Description</h3>
+<p>Submit a new task to a worker for async execution.</p>
+<h3 id="parameters_2">Parameters</h3>
+<p><strong>Path:</strong>
+| Name | Type | Required | Example |
+|------|------|----------|---------|
+| worker_id | string | ✅ | <code>recruitment_v1</code> |</p>
+<p><strong>Request Body:</strong></p>
+<pre><code class="language-json">{
+  &quot;title&quot;: &quot;Screen Alice Johnson for Senior Engineer&quot;,
+  &quot;objective&quot;: &quot;Evaluate candidate fit for role&quot;,
+  &quot;context&quot;: &quot;Job: Senior Backend Engineer, 5+ years Python, Docker, AWS&quot;,
+  &quot;expected_output&quot;: &quot;Candidate score (0-100) and recommendation (PASS/MAYBE/REJECT)&quot;,
+  &quot;external_user_id&quot;: &quot;ceonova-user-456&quot;
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>title</code></td>
+<td>string</td>
+<td>✅</td>
+<td>Task name (visible in logs)</td>
+</tr>
+<tr>
+<td><code>objective</code></td>
+<td>string</td>
+<td>✅</td>
+<td>What the worker should do</td>
+</tr>
+<tr>
+<td><code>context</code></td>
+<td>string</td>
+<td>❌</td>
+<td>Background info, constraints, input data</td>
+</tr>
+<tr>
+<td><code>expected_output</code></td>
+<td>string</td>
+<td>❌</td>
+<td>Description of desired result format</td>
+</tr>
+<tr>
+<td><code>external_user_id</code></td>
+<td>string</td>
+<td>✅</td>
+<td>CEONova user/team ID for tracking &amp; filtering</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example-request_2">Example Request</h3>
+<pre><code class="language-bash">curl -X POST http://localhost:8000/api/v1/workers/recruitment_v1/tasks \
+  -u &quot;ceonova@agentsmarket.com:password&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{
+    &quot;title&quot;: &quot;Screen Alice Johnson&quot;,
+    &quot;objective&quot;: &quot;Evaluate candidate fit&quot;,
+    &quot;context&quot;: &quot;Senior Engineer role, 5+ years required&quot;,
+    &quot;expected_output&quot;: &quot;Score (0-100) and recommendation&quot;,
+    &quot;external_user_id&quot;: &quot;ceonova-user-456&quot;
+  }'
+</code></pre>
+<h3 id="response-202-accepted">Response (202 Accepted)</h3>
+<pre><code class="language-json">{
+  &quot;task_id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;,
+  &quot;worker_id&quot;: &quot;recruitment_v1&quot;
+}
+</code></pre>
+<h3 id="response-codes">Response Codes</h3>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+<th>Next Step</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>202</strong></td>
+<td>Task queued successfully</td>
+<td>Poll <code>task_id</code> for results</td>
+</tr>
+<tr>
+<td><strong>401</strong></td>
+<td>Auth failed</td>
+<td>Verify credentials</td>
+</tr>
+<tr>
+<td><strong>404</strong></td>
+<td>Worker not found</td>
+<td>List workers: <code>GET /api/v1/workers/</code></td>
+</tr>
+<tr>
+<td><strong>422</strong></td>
+<td>Invalid request body</td>
+<td>Check required fields &amp; types</td>
+</tr>
+<tr>
+<td><strong>429</strong></td>
+<td>Rate limited (20 req/min)</td>
+<td>Wait &amp; retry with backoff</td>
+</tr>
+</tbody>
+</table>
+<h3 id="task-lifecycle">Task Lifecycle</h3>
+<pre><code>Submission (202 Accepted)
+    ↓
+Status: pending (queued, waiting to start)
+    ↓
+Status: running (worker executing)
+    ↓
+Status: done (completed with result) or failed (error)
+</code></pre>
+<h3 id="use-cases_2">Use Cases</h3>
+<ul>
+<li>Submit candidate for screening</li>
+<li>Send document for analysis</li>
+<li>Trigger report generation</li>
+<li>Execute any worker-specific task</li>
+</ul>
+<hr />
+<h2 id="get-apiv1workersworker_idtasks">GET /api/v1/workers/{worker_id}/tasks</h2>
+<h3 id="description_3">Description</h3>
+<p>List all tasks submitted by a specific CEONova user.</p>
+<h3 id="parameters_3">Parameters</h3>
+<p><strong>Path:</strong>
+| Name | Type | Required | Example |
+|------|------|----------|---------|
+| worker_id | string | ✅ | <code>recruitment_v1</code> |</p>
+<p><strong>Query String:</strong>
+| Name | Type | Required | Default | Notes |
+|------|------|----------|---------|-------|
+| <code>external_user_id</code> | string | ✅ | — | CEONova user ID (without <code>ceonova:</code> prefix) |
+| <code>limit</code> | integer | ❌ | 20 | Max results per page (1-100) |
+| <code>offset</code> | integer | ❌ | 0 | Pagination offset |</p>
+<h3 id="example-request_3">Example Request</h3>
+<pre><code class="language-bash"># List first 20 tasks for user 'ceonova-user-456'
+curl -X GET &quot;http://localhost:8000/api/v1/workers/recruitment_v1/tasks?external_user_id=ceonova-user-456&amp;limit=20&amp;offset=0&quot; \
+  -u &quot;ceonova@agentsmarket.com:password&quot;
+</code></pre>
+<h3 id="example-response-200-ok_2">Example Response (200 OK)</h3>
+<pre><code class="language-json">{
+  &quot;total&quot;: 52,
+  &quot;items&quot;: [
+    {
+      &quot;task_id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;,
+      &quot;worker_id&quot;: &quot;recruitment_v1&quot;,
+      &quot;status&quot;: &quot;done&quot;,
+      &quot;created_at&quot;: &quot;2026-05-23T10:30:00Z&quot;
+    },
+    {
+      &quot;task_id&quot;: &quot;660e8400-e29b-41d4-a716-446655440001&quot;,
+      &quot;worker_id&quot;: &quot;recruitment_v1&quot;,
+      &quot;status&quot;: &quot;running&quot;,
+      &quot;created_at&quot;: &quot;2026-05-23T10:35:00Z&quot;
+    }
+  ]
+}
+</code></pre>
+<h3 id="use-cases_3">Use Cases</h3>
+<ul>
+<li>List user's submitted tasks</li>
+<li>Monitor task queue</li>
+<li>Implement pagination for dashboards</li>
+<li>Find task IDs for polling</li>
+</ul>
+<hr />
+<h2 id="get-apiv1workersworker_idtaskstask_id">GET /api/v1/workers/{worker_id}/tasks/{task_id}</h2>
+<h3 id="description_4">Description</h3>
+<p>Poll task status and retrieve results.</p>
+<h3 id="parameters_4">Parameters</h3>
+<p><strong>Path:</strong>
+| Name | Type | Required | Example |
+|------|------|----------|---------|
+| worker_id | string | ✅ | <code>recruitment_v1</code> |
+| task_id | string | ✅ | <code>550e8400-e29b-41d4-a716-446655440000</code> |</p>
+<p><strong>Query String (optional):</strong>
+| Name | Type | Notes |
+|------|------|-------|
+| <code>external_user_id</code> | string | CEONova user ID (for ownership verification) |</p>
+<h3 id="example-request_4">Example Request</h3>
+<pre><code class="language-bash">curl -X GET &quot;http://localhost:8000/api/v1/workers/recruitment_v1/tasks/550e8400-e29b-41d4-a716-446655440000&quot; \
+  -u &quot;ceonova@agentsmarket.com:password&quot;
+</code></pre>
+<h3 id="response-examples">Response Examples</h3>
+<p><strong>Status: pending (still queued)</strong></p>
+<pre><code class="language-json">{
+  &quot;task_id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;,
+  &quot;worker_id&quot;: &quot;recruitment_v1&quot;,
+  &quot;status&quot;: &quot;pending&quot;,
+  &quot;result&quot;: null
+}
+</code></pre>
+<p><strong>Status: running (in progress)</strong></p>
+<pre><code class="language-json">{
+  &quot;task_id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;,
+  &quot;worker_id&quot;: &quot;recruitment_v1&quot;,
+  &quot;status&quot;: &quot;running&quot;,
+  &quot;result&quot;: null
+}
+</code></pre>
+<p><strong>Status: done (completed successfully)</strong></p>
+<pre><code class="language-json">{
+  &quot;task_id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;,
+  &quot;worker_id&quot;: &quot;recruitment_v1&quot;,
+  &quot;status&quot;: &quot;done&quot;,
+  &quot;result&quot;: {
+    &quot;overall_score&quot;: 85,
+    &quot;decision&quot;: &quot;PASS&quot;,
+    &quot;reasoning&quot;: &quot;Exceeds all technical requirements&quot;,
+    &quot;highlights&quot;: [
+      &quot;7 years experience (exceeds 5+ requirement)&quot;,
+      &quot;Bonus skills: Kubernetes, CI/CD&quot;
+    ],
+    &quot;concerns&quot;: []
+  }
+}
+</code></pre>
+<p><strong>Status: failed (error or timeout)</strong></p>
+<pre><code class="language-json">{
+  &quot;task_id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;,
+  &quot;worker_id&quot;: &quot;recruitment_v1&quot;,
+  &quot;status&quot;: &quot;failed&quot;,
+  &quot;result&quot;: {
+    &quot;error&quot;: &quot;Worker timeout after 10 minutes&quot;,
+    &quot;task_id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;
+  }
+}
+</code></pre>
+<h3 id="task-status-values">Task Status Values</h3>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Meaning</th>
+<th>Result</th>
+<th>Next Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pending</code></td>
+<td>Queued, waiting</td>
+<td>None</td>
+<td>Poll again in 2-5s</td>
+</tr>
+<tr>
+<td><code>running</code></td>
+<td>Executing</td>
+<td>None</td>
+<td>Poll again in 2-5s</td>
+</tr>
+<tr>
+<td><code>done</code></td>
+<td>Success</td>
+<td>✅ Available</td>
+<td>Extract <code>result</code></td>
+</tr>
+<tr>
+<td><code>failed</code></td>
+<td>Error/timeout</td>
+<td>⚠️ Error info</td>
+<td>Retry or escalate</td>
+</tr>
+<tr>
+<td><code>unknown</code></td>
+<td>Not found</td>
+<td>None</td>
+<td>Check task_id</td>
+</tr>
+</tbody>
+</table>
+<h3 id="use-cases_4">Use Cases</h3>
+<ul>
+<li>Poll task progress (typical: 2-5 min per task)</li>
+<li>Retrieve results when complete</li>
+<li>Monitor long-running operations</li>
+<li>Implement retry logic on failure</li>
+</ul>
+<hr />
+<h2 id="error-handling">Error Handling</h2>
+<h3 id="401-unauthorized">401 Unauthorized</h3>
+<pre><code class="language-json">{
+  &quot;detail&quot;: &quot;Invalid credentials&quot;
+}
+</code></pre>
+<p><strong>Fixes:</strong>
+- Verify email spelling (case-sensitive)
+- Check password correctness
+- Ensure HTTPS in production
+- Refresh Bearer token if expired</p>
+<h3 id="404-not-found">404 Not Found</h3>
+<pre><code class="language-json">{
+  &quot;detail&quot;: &quot;Worker not found&quot;
+}
+</code></pre>
+<p><strong>Fixes:</strong>
+- Verify worker_id matches <code>GET /api/v1/workers/</code> response
+- Check for typos in worker_id
+- Contact support if worker was archived</p>
+<h3 id="422-unprocessable-entity">422 Unprocessable Entity</h3>
+<pre><code class="language-json">{
+  &quot;detail&quot;: &quot;Value error, external_user_id is required&quot;
+}
+</code></pre>
+<p><strong>Fixes:</strong>
+- Ensure all required fields are present
+- Verify JSON syntax (valid JSON, correct types)
+- Check field names match schema</p>
+<h3 id="429-too-many-requests">429 Too Many Requests</h3>
+<pre><code class="language-json">{
+  &quot;detail&quot;: &quot;Rate limit exceeded&quot;
+}
+</code></pre>
+<p><strong>Rate Limits:</strong>
+- POST <code>/api/v1/workers/{worker_id}/tasks</code>: <strong>20 requests/minute</strong> per IP
+- GET endpoints: Not rate-limited</p>
+<p><strong>Fixes:</strong>
+- Implement exponential backoff (1s, 2s, 4s, ...)
+- Batch submissions if submitting many tasks
+- Contact support for higher limits</p>
+<hr />
+<h2 id="data-types-schemas">Data Types &amp; Schemas</h2>
+<h3 id="workerinfo">WorkerInfo</h3>
+<pre><code class="language-json">{
+  &quot;worker_id&quot;: &quot;string&quot;,
+  &quot;name&quot;: &quot;string&quot;,
+  &quot;description&quot;: &quot;string&quot;,
+  &quot;status&quot;: &quot;available&quot;,
+  &quot;capabilities&quot;: [&quot;string&quot;]
+}
+</code></pre>
+<h3 id="workertasksubmitrequest">WorkerTaskSubmitRequest</h3>
+<pre><code class="language-json">{
+  &quot;title&quot;: &quot;string&quot;,
+  &quot;objective&quot;: &quot;string&quot;,
+  &quot;context&quot;: &quot;string (optional)&quot;,
+  &quot;expected_output&quot;: &quot;string (optional)&quot;,
+  &quot;external_user_id&quot;: &quot;string&quot;
+}
+</code></pre>
+<h3 id="workertaskstatusresponse">WorkerTaskStatusResponse</h3>
+<pre><code class="language-json">{
+  &quot;task_id&quot;: &quot;string (UUID)&quot;,
+  &quot;worker_id&quot;: &quot;string&quot;,
+  &quot;status&quot;: &quot;pending | running | done | failed | unknown&quot;,
+  &quot;result&quot;: &quot;any (freeform JSON, varies by worker)&quot;
+}
+</code></pre>
+<hr />
+<h2 id="whats-next">What's Next?</h2>
+<p>→ <strong><a href="../../integration-patterns/code-examples/01-curl/">Code Examples</a></strong> — Ready-to-use samples</p>
+<p>→ <strong><a href="../../integration-patterns/02-workflows/">Workflows</a></strong> — Real-world patterns</p>
+<p>→ <strong><a href="../../operations/01-troubleshooting/">Troubleshooting</a></strong> — Debug common issues</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../../getting-started/02-authentication/" class="btn btn-neutral float-left" title="Authentication"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../integration-patterns/code-examples/01-curl/" class="btn btn-neutral float-right" title="cURL">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../../getting-started/02-authentication/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../../integration-patterns/code-examples/01-curl/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
