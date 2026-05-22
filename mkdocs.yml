@@ -1,7 +1,6 @@
 site_name: Agent Market Documentation
 site_description: Documentation portal for the AI recruitment agent project
-docs_dir: .
-site_dir: site
+docs_dir: docs
 theme:
   name: readthedocs
 nav:
